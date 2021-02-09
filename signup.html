@@ -6,142 +6,40 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css"/>
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+     <!-- Google Maps API-->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyAm5YUmQecbnAsYWwKqox8uVucKumvRbxs"></script>
+
     <style>
     body {font-family: Arial, Helvetica, sans-serif;}
     * {box-sizing: border-box}
-
-    /* Full-width input fields */
-    input[type=text], input[type=password] {
-      width: 50%;
-      padding: 15px;
-      margin: 5px 0 22px 0;
-      display: inline-block;
-      border: none;
-      background: #f1f1f1;
-    }
-
-    input[type=text]:focus, input[type=password]:focus {
-      background-color: #ddd;
-      outline: none;
-    }
-
-    hr {
-      border: 1px solid #f1f1f1;
-      margin-bottom: 25px;
-    }
-
-    /* Set a style for all buttons */
-    button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 14px 20px;
-      margin: 8px 0;
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      opacity: 0.9;
-    }
-
-    button:hover {
-      opacity:1;
-    }
-
-    /* Extra styles for the cancel button */
-    .cancelbtn {
-      padding: 14px 20px;
-      background-color: #f44336;
-    }
-
-    /* Float cancel and signup buttons and add an equal width */
-    .cancelbtn, .signupbtn {
-      float: left;
-      width: 50%;
-    }
-
-    /* Add padding to container elements */
-    .container {
-      padding: 16px;
-    }
-
-    /* Clear floats */
-    .clearfix::after {
-      content: "";
-      clear: both;
-      display: table;
-    }
-
-    /* Change styles for cancel button and signup button on extra small screens */
-    @media screen and (max-width: 300px) {
-      .cancelbtn, .signupbtn {
-        width: 100%;
-      }
-    }
-
-    body {
-    font: 20px Montserrat, sans-serif;
-    line-height: 1.8;
-    color: #f5f6f7;
-  }
-  p {font-size: 16px;}
-  .margin {margin-bottom: 45px;}
-  .bg-1 { 
-    background-color: #1abc9c; /* Green */
-    color: #ffffff;
-  }
-  .bg-2 { 
-    background-color: #474e5d; /* Dark Blue */
-    color: #ffffff;
-  }
-  .bg-3 { 
-    background-color: #ffffff; /* White */
-    color: #555555;
-  }
-  .bg-4 { 
-    background-color: #2f2f2f; /* Black Gray */
-    color: #fff;
-  }
-  .container-fluid {
-    padding-top: 70px;
-    padding-bottom: 70px;
-  }
-  .navbar {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    border: 0;
-    border-radius: 0;
-    margin-bottom: 0;
-    font-size: 12px;
-    letter-spacing: 5px;
-  }
-  .navbar-nav  li a:hover {
-    color: #1abc9c !important;
-  }
-
-  a{
-    display:inline;
-    width: 100%;
-    padding-top: 30px;
-    padding:0.35em 1.2em;
-    border:0.1em solid #FFFFFF;
-    margin:0 0.3em 0.3em 0;
-    border-radius:0.12em;
-    box-sizing: border-box;
-    text-decoration: none;
-    font-family:'Roboto',sans-serif;
-    font-weight:300;
-    color:#FFFFFF;
-    text-align:center;
-    transition: all 0.2s;
-  }
-
-  #buttons{
-    
-    display: inline;
-  }
     </style>
+
+    <script>
+      var searchInput = 'search_input';
+
+      $(document).ready(function () {
+          var autocomplete;
+          autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
+              types: ['geocode'],
+              componentRestrictions: {
+              country: "tt"
+    }
+          });
+        
+          google.maps.event.addListener(autocomplete, 'place_changed', function () {
+              var near_place = autocomplete.getPlace();
+              document.getElementById('latitude').value = near_place.geometry.location.lat();
+              document.getElementById('longitude').value = near_place.geometry.location.lng();
+          });
+      });
+    </script>
+
+  </head> 
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-default">
@@ -164,7 +62,7 @@
         </div>
       </div>
     </nav>
-    <!-- First Container -->
+    <!-- First Container --> 
     <div class="container-fluid bg-1 text-center">
       <div id="signup">
         <div>
@@ -174,12 +72,18 @@
             <input id="username" type="text" placeholder="Username"><br/><br/>			
             <input id="password" type="password" placeholder="Password"><br/><br/>
             <input id="number" type="tel" placeholder="Phone Number"><br/><br/>
-            <input id="address" type="text" placeholder="Address"><br/><br/>
+            <input type="text" class="form-control" id="search_input" placeholder="Type address..." /><br/><br/>
+
+            <!-- Used to help pass Longitude and Latitude to .js file --> 
+            <input type="hidden" id="latitude" />
+            <input type="hidden" id="longitude" />
+
             <button id="registerbutton" onclick="runSignupUser();">Register</button><br/>
 		</div>
       </div>
     </div>
-    
+
+     
     <!-- Footer -->
     <footer class="container-fluid bg-4 text-center">
       <p>EasyDrop by RMD Technologies</p> 
@@ -190,9 +94,6 @@
 <script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-auth.js"></script>
-
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
 <script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-analytics.js"></script>
  
  <!--Main Firebase scripts-->

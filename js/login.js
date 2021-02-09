@@ -21,5 +21,6 @@ async function signInUser(email, password){
     var success=await signInUser(email, password);
     if(success){
       alert("Login successful");
+      window.location.href="index.html";
     }
   }
