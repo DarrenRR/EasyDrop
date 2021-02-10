@@ -11,25 +11,32 @@
     </head>
     <body>
         <main>
-            <div class="modaldesign">
+            <div class="container">
                 <form>  
-                    <div class="popup-modal">
-                        <img src="New folder/homepage.png"> 
-                        <input type="text" placeholder="First Name" type="fnamebox" oninput="UpdateTrip(this.value, 'fnameD')" required><br>
-                        <input type="text" type="lnamebox" placeholder="Last Name" oninput="UpdateTrip(this.value, 'lnameD')" required><br>
-                        <input type="text" type="emailbox" placeholder="Email" oninput="UpdateTrip(this.value, 'emailD')" required><br>
-                        <input type="text" type="cellbox" placeholder="Phone Number" oninput="UpdateTrip(this.value, 'cellD')" required><br>
-                        <input type="text" type="seatsbox" placeholder="Available Seats" oninput="UpdateTrip(this.value, 'seatsD')" required><br>
-                        <input type="text" type="pricebox" placeholder="Price" oninput="UpdateTrip(this.value, 'priceD')" required><br>
-                        <input type="text" type="licensebox" placeholder="Driver License"  oninput="UpdateTrip(this.value, 'licenseD')" required><br>
-                        <input type="text" type="descriptionbox"  placeholder="Description of vehicle" oninput="UpdateTrip(this.value, 'descriptionD')" required><br>
-
-                        <button class="waves-effect waves-light btn" id="driverAddBtn" >Share Trip</button>
-                        <button class="waves-effect waves-light btn" id="driverEditBtn" >Update</button>
-<!--                         <button class="waves-effect waves-light btn" id="driverDelBtn" >Delete</button> -->
+                    <!-- Modal Trigger -->
+                    <a class="waves-effect waves-light btn modal-trigger" href="#offerDrop">Modal</a>
+                    
+                    <!-- Modal Structure -->
+                    <div id="offerDrop" class="modal">
+                        <div class="modal-content">
+                            <img src="New folder/homepage.png"> 
+                            <input type="text" placeholder="First Name" type="fnamebox" oninput="UpdateTrip(this.value, 'fnameD')" required><br>
+                            <input type="text" type="lnamebox" placeholder="Last Name" oninput="UpdateTrip(this.value, 'lnameD')" required><br>
+                            <input type="text" type="emailbox" placeholder="Email" oninput="UpdateTrip(this.value, 'emailD')" required><br>
+                            <input type="text" type="cellbox" placeholder="Phone Number" oninput="UpdateTrip(this.value, 'cellD')" required><br>
+                            <input type="text" type="seatsbox" placeholder="Available Seats" oninput="UpdateTrip(this.value, 'seatsD')" required><br>
+                            <input type="text" type="pricebox" placeholder="Price" oninput="UpdateTrip(this.value, 'priceD')" required><br>
+                            <input type="text" type="licensebox" placeholder="Driver License"  oninput="UpdateTrip(this.value, 'licenseD')" required><br>
+                            <input type="text" type="descriptionbox"  placeholder="Description of vehicle" oninput="UpdateTrip(this.value, 'descriptionD')" required><br>
+                
+                            <button class="waves-effect waves-light btn" id="driverAddBtn" >Share Trip</button>
+                            <!-- <button class="waves-effect waves-light btn" id="driverEditBtn" >Update</button>
+                            <button class="waves-effect waves-light btn" id="driverDelBtn" >Delete</button> -->
+                                    
+                        </div>
                     </div>
                 </form>
-            </div> 
+            </div>
         </main>
         <!-- ================================CLOUD FIRESTORE========================== -->
         <!-- The core Firebase JS SDK is always required and must be listed first -->
@@ -79,7 +86,16 @@
             }
         </script>
         <!-- ================================CLOUD FIRESTORE========================== -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                $('.modal').modal();
+            });
+        </script>
         <script src="js/AddTrip.js"></script>
+            <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
     </body>
 </html>
 
