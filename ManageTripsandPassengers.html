@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width-device-width, initial scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  
+    <link rel="stylesheet" href="style.css">
+    <title>Manage Information</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-default">
+        <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>                        
+            </button>
+            <a class="navbar-brand" href="index.html">EasyDrop</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Find a Drop</a></li>
+            <li><a href="#">Offer a Drop </a></li>
+            <li><a href="login.html">Log In</a></li>
+            <li><a href="signup.html">Sign Up</a></li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+    <div class="container-fluid bg-1 text-left">
+        <main class="container"> 
+             <p>Manage Trips</p>
+            <table class="table"> <!--table-hover-->
+                <thead class="thead-dark">
+                <tr style="background-color:grey">
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Available Seats</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Destination</th>
+                    <th scope="row">Decision</th>
+                </tr>
+                </thead>
+                <tbody id="requestsRender">
+                    
+                </tbody>
+            </table>
+        </main>
+    </div>
+  
+  
+
+            
+        
+    <!-- </div> -->
+    <!-- Footer -->
+    <footer class="container-fluid bg-4 text-center">
+        <p>EasyDrop by RMD Technologies</p> 
+    </footer>
+    <!--------------------HAVE TO CHANGE TO SUIT DARREN'S PROJECT---------fIREBASE SDK---------------------->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+
+
+
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyDttS03u2SRMX8aW3Y8wXMSVk-SzUqZuqs",
+            authDomain: "easydrop-88d08.firebaseapp.com",
+            projectId: "easydrop-88d08",
+            storageBucket: "easydrop-88d08.appspot.com",
+            messagingSenderId: "783674652012",
+            appId: "1:783674652012:web:02572f6b96a65b73546f49",
+            measurementId: "G-PCLT261TX0"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+         var db= firebase.firestore();
+
+
+
+
+// ====================== Renders all data within the DB =====================
+    // cloudDB.collection("Passengers").get().then((snapshot) =>{
+    //     snapshot.docs.forEach(doc => {
+    //         console.log(doc.data())
+    //     })
+    // })
+// ====================== Renders all data within the DB =====================
+
+    const tbody=document.querySelector('#requestsRender');
+    
+    
+        let decision1=document.createElement('button');
+        let decision2=document.createElement('button'); 
+        decision2.setAttribute("id", "driverDelBtn");
+
+    function renderTable(doc){
+        let row=document.createElement('tr');
+        let lname=document.createElement('td');
+        let fname=document.createElement('td');
+        // let email=document.createElement('td');
+        let seats=document.createElement('td');
+        let price=document.createElement('td');
+        let time=document.createElement('td');
+        let date=document.createElement('td');
+        let destination=document.createElement('td');
+// ==========================================================//
+        row.setAttribute('data-id', doc.id);
+        fname.innerHTML = doc.data().FirstName;
+        lname.innerHTML = doc.data().LastName;
+        seats.innerHTML = doc.data().AvailableSeats;
+        price.innerHTML = doc.data().Price;
+        // email.innerHTML = doc.data().Email;
+        time.innerHTML = doc.data().Time;
+        date.innerHTML = doc.data().Date;
+        destination.innerHTML = doc.data().Destination;
+        decision1.innerHTML = `Edit`;//THIS IS TO BE A BUTTON
+        decision2.innerHTML = `Delete`;//THIS IS TO BE A BUTTON
+// ==========================================================//
+        row.appendChild(fname);
+        row.appendChild(lname);
+        row.appendChild(seats);
+        row.appendChild(price);
+        row.appendChild(time);
+        // row.appendChild(email);
+        row.appendChild(date);
+        row.appendChild(destination);
+        row.appendChild(decision1);
+        row.appendChild(decision2);
+// ==========================================================//    
+        tbody.appendChild(row);
+    }
+
+    db.collection("Trips").get().then((snapshot) =>{
+        snapshot.docs.forEach(doc => {
+            renderTable(doc);
+        });
+    });
+
+    decision2.addEventListener('click', (e) =>{
+        e.preventDefault();
+        db.collection("Trips").doc(doc.id).delete();
+    }); 
+    </script>
+<!------------------HAVE TO CHANGE TO SUIT DARREN'S PROJECT---------------fIREBASE SDK---------------------->
+    
+
+</body>
+
