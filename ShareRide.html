@@ -28,11 +28,15 @@
                             <input type="text" type="pricebox" placeholder="Price" oninput="UpdateTrip(this.value, 'priceD')" required><br>
                             <input type="text" type="licensebox" placeholder="Driver License"  oninput="UpdateTrip(this.value, 'licenseD')" required><br>
                             <input type="text" type="descriptionbox"  placeholder="Description of vehicle" oninput="UpdateTrip(this.value, 'descriptionD')" required><br>
-                
-                            <button class="waves-effect waves-light btn" id="driverAddBtn" >Share Trip</button>
-                            <!-- <button class="waves-effect waves-light btn" id="driverEditBtn" >Update</button>
-                            <button class="waves-effect waves-light btn" id="driverDelBtn" >Delete</button> -->
                             
+                            <input type="text" type="time" placeholder="Time of Departure"  oninput="UpdateTrip(this.value, 'timeD')" required><br>
+                            <input type="text" type="date" placeholder="Date of Departure"  oninput="UpdateTrip(this.value, 'dateD')" required><br>
+                            <input type="text" type="destination"  placeholder="Destination" oninput="UpdateTrip(this.value, 'destinationD')" required><br>
+
+
+                            <button class="waves-effect waves-light btn" id="driverAddBtn" >Share Trip</button>
+                            <button class="waves-effect waves-light btn" id="driverEditBtn" >Update</button>
+                            <button class="waves-effect waves-light btn" id="driverDelBtn" >Delete</button>
                                     
                         </div>
                     </div>
@@ -72,8 +76,13 @@
             let driverprice =document.getElementById("pricebox");
             let driverlicense =document.getElementById("licensebox");
             let driverdescription =document.getElementById("descriptionbox");
+
+            let driverdeparture =document.getElementById("time");
+            let driverdate =document.getElementById("date");
+            let driverdestination =document.getElementById("destination");
             
             let tempDfname, tempDlname, tempDemail, tempDcell, tempDseats, tempDprice, tempDlicense, tempDdescription; 
+            let tempDtime,tempDdate,tempDdestination;
 
             function UpdateTrip(val, type){//this function updates the trip
                 if (type=='fnameD') tempDfname=val;
@@ -84,6 +93,10 @@
                 else if(type=='priceD') tempDprice=val;
                 else if(type=='licenseD') tempDlicense=val;
                 else if(type=='descriptionD') tempDdescription=val;
+
+                else if(type=='timeD') tempDtime=val;
+                else if(type=='dateD') tempDdate=val;
+                else if(type=='destinationD') tempDdestination=val;
             }
         </script>
         <!-- ================================CLOUD FIRESTORE========================== -->
@@ -93,7 +106,7 @@
                 $('.modal').modal();
             });
         </script>
-        <script src="js/AddTrip.js"></script>
+        <script src="/jsAddTrip.js"></script>
             <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     
