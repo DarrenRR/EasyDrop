@@ -12,6 +12,9 @@ driverAddBtn.addEventListener('click', (e) =>{
         Price: tempDprice, 
         DriverLicense: tempDlicense,
         AdditionalNotes: tempDdescription,
+        Time: tempDtime,
+        Date: tempDdate,
+        Destination: tempDdestination,
     });
 }); //adds data using the button
             
@@ -25,7 +28,10 @@ driverEditBtn.addEventListener('click', (e) =>{
         AvailableSeats: tempDseats, 
         Price: tempDprice, 
         DriverLicense: tempDlicense,
-        AdditionalNotes: tempDdescription
+        AdditionalNotes: tempDdescription,
+        Time: tempDtime,
+        Date: tempDdate,
+        Destination: tempDdestination
     };
     db.collection("Trips").doc(tempDemail).update(temp1);
 }); //edits data using the button 
