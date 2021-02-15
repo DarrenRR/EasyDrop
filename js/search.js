@@ -14,7 +14,11 @@ async function getTrips(start_location, stop_location){
     if(resolved==false)
       return null;
     carpools.forEach(function(result){
-        console.log(result.data().Price)
+        console.log('$'+ result.data().Price + ', ' + result.data().AvailableSeats)
+        document.getElementById("searchResults").innerHTML = "Driver's Name: "+ result.data().FirstName + ' ' + result.data().LastName +
+        ' Available Seats: '+ result.data().AvailableSeats+
+        ' Price: $'+ result.data().Price+
+        ' Destination: '+ result.data().Destination;
     });
     return carpools;
 }
