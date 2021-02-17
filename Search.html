@@ -6,90 +6,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/styles.css"/>
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-  <!-- Google Maps API-->
-  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyAm5YUmQecbnAsYWwKqox8uVucKumvRbxs"></script>
+  <!-- Google Maps API-->.
+  <script async src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyAm5YUmQecbnAsYWwKqox8uVucKumvRbxs"></script>
   <style>
-  body {
-    font: 20px Montserrat, sans-serif;
-    line-height: 1.8;
-    color: #f5f6f7;
-  }
-  p {font-size: 16px;}
-  .margin {margin-bottom: 45px;}
-  .bg-1 { 
-    background-color: white; /* Green */
-    color: #ffffff;
-    width:55%;
-    height:800px;
-    float: left;
-    border: solid black;
-  }
-  .bg-2 { 
-    background-color: #474e5d; /* Dark Blue */
-    color: #ffffff;
-    width:45%;
-    height:800px;
-    float: left;
-  }
-  h5{
-    color:black;
-  }
-  .card-text{
-    color:black;
-  }
-  .bg-3 { 
-    background-color: #ffffff; /* White */
-    color: #555555;
-  }
-  .bg-4 { 
-    background-color: #2f2f2f; /* Black Gray */
-    color: #fff;
-  }
-  .container-fluid {
-    padding-top: 70px;
-    padding-bottom: 70px;
-  }
-  .navbar {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    border: 0;
-    border-radius: 0;
-    margin-bottom: 0;
-    font-size: 12px;
-    letter-spacing: 5px;
-  }
-  .navbar-nav  li a:hover {
-    color: #1abc9c !important;
-  }
 
-  a{
-    display:inline;
-    width: 100%;
-    padding-top: 30px;
-    padding:0.35em 1.2em;
-    border:0.1em solid #FFFFFF;
-    /* margin:0 0.3em 0.3em 0; */
-    border-radius:0.12em;
-    box-sizing: border-box;
-    text-decoration: none;
-    font-family:'Roboto',sans-serif;
-    font-weight:300;
-    color:#FFFFFF; 
-    text-align:center;
-    transition: all 0.2s;
-  }
+    .bg-1 { 
+        background-color: #39b485; /* Green */
+        color: #ffffff;
+      }
 
-  #buttons{
-    display: inline;
-  }
-  label{
-    color: black;
-  }
-  
+    label{
+    color: rgb(255, 255, 255);
+    display: inline-block;
+    width: 150px;
+    }
+
   </style>
 
 <script>
@@ -98,7 +34,7 @@
     $(document).ready(function () {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(startInput)), {
-            types: ['(regions)'],
+            types: ['geocode'],
             componentRestrictions: {
             country: "tt"
   }
@@ -106,9 +42,10 @@
       
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var near_place = autocomplete.getPlace();
-            console.log(autocomplete);
             var start_location = document.getElementById("start_input").value;
             document.getElementById('start_location').value = start_location;
+            document.getElementById('start_latitude').value = near_place.geometry.location.lat();
+            document.getElementById('stop_longitude').value = near_place.geometry.location.lng();
         });
     });
 
@@ -117,7 +54,7 @@
     $(document).ready(function () {
         var autocomplete;
         autocomplete = new google.maps.places.Autocomplete((document.getElementById(destinationInput)), {
-            types: ['(regions)'],
+            types: ['geocode'],
             componentRestrictions: {
             country: "tt"
   }
@@ -133,7 +70,6 @@
   </script>
 </head>
 <body>
-
 <!-- Navbar -->
 <nav class="navbar navbar-default">
   <div class="container">
@@ -147,8 +83,8 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Find a Drop</a></li>
-        <li><a href="#">Offer a Drop </a></li>
+        <li><a href="Search.html">Find a Drop</a></li>
+        <li><a href="ShareRide.html">Offer a Drop </a></li>
         <li><a href="login.html">Log In</a></li>
         <li><a href="signup.html">Sign Up</a></li>
       </ul>
@@ -158,24 +94,34 @@
 
 <!-- First Container -->
 <div class="container-fluid bg-1 text-center">
-  <form class="form-inline">
-    <div class="form-group">
-      <label for="location">Location From:</label>
+  <h1 id = "statement" class="margin">Find a Carpool</h1>
+  <form class="form">
+
+    <div class="form-group row">
+      <label for="location">Start</label>
       <input type="text" class="form-control" id="start_input" placeholder="Address">
     </div>
-    <div class="form-group">
-      <label for="destination">Destination:</label>
+    <div class="form-group row">
+      <label  for="destination">Destination</label>
       <input type="text" class="form-control" id="destination_input" placeholder="Address">
     </div>
 
     <!-- Used to help pass Locations to .js file --> 
     <input type="hidden" id="start_location" />
     <input type="hidden" id="stop_location" />
+
+    <input type="hidden" id="start_latitude" />
+    <input type="hidden" id="start_longitude" />
+
+    <input type="hidden" id="stop_latitude" />
+    <input type="hidden" id="stop_longitude" />
     
-    <div class="form-group">
-      <label for="date">Date:</label>
+    <div class="form-group row">
+      <label  for="date">Date:</label>
       <input type="text" class="form-control" id="date" placeholder="dd/mm/YYYY">
     </div>
+
+    <!--
     <div class="form-group">
       <label for="time">Time:</label>
       <input type="text" class="form-control" id="time" placeholder="00:00">
@@ -184,16 +130,22 @@
       <label for="gender">Gender:</label>
       <input type="text" class="form-control" id="gender" placeholder="(Optional)">
     </div>
+    -->
     
   </form>
-  <button type="button" class="btn btn-primary" onclick="showTrips()">Search</button><br>
-  <br><h5 class="container-fluid text-left" id = "results">Search Results:</h5>
+  <button type="button" class="btn btn-primary" onclick="getTrips()">Search</button><br>
+  
+  <br><h5 class="container-fluid text-left" id = "results"></h5>
+  <div id = "searchResults">
+  </div>
+  <!--
+  
   <div class="row">
     <div class="col-sm-6">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Join Now</h5>
-          <p class="card-text">Search results will appear in here.</p>
+          <p class="card-text" id = "searchResults">Search results will appear in here.</p>
           <table class="table table-hover">
             ...
           </table>
@@ -214,13 +166,14 @@
       </div>
     </div>
   </div>
-  
+  -->
 
 </div>
 
+
 <!-- Second Container -->
 <div class="container-fluid bg-2 text-left" id="mapview">
-  Render map here
+  <div id = "map"></div>
 </div>
 
 <!-- Footer -->
@@ -229,13 +182,13 @@
 </footer>
 
 <!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
 
 <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
  
  <!--Main Firebase scripts-->
  <script src="js/initializefirebase.js"></script>

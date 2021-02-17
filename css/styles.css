@@ -11,7 +11,8 @@ body {
   }
   .bg-2 { 
     background-color: #474e5d; /* Dark Blue */
-    color: #ffffff;
+    color: #000000;
+    height: 100%;
   }
   .bg-3 { 
     background-color: #ffffff; /* White */
@@ -53,6 +54,11 @@ body {
     color:#FFFFFF;
     text-align:center;
     transition: all 0.2s;
+  }
+
+  .button1{
+    background-color: white;
+    color: #39b485;
   }
 
   #buttons{
@@ -144,4 +150,13 @@ body {
   #statement{
       color: white;
       font-weight: bold;
+  }
+
+  #map {
+    height: 100%;
+  }
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
   }

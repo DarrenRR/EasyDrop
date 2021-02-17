@@ -10,6 +10,10 @@
   <link rel="stylesheet" href="css/styles.css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <style>
+    
+  </style>
   </head>
   <body>
 
@@ -26,8 +30,8 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Find a Drop</a></li>
-            <li><a href="#">Offer a Drop </a></li>
+            <li><a href="Search.html">Find a Drop</a></li>
+            <li><a href="ShareRide.html">Offer a Drop </a></li>
             <li><a href="login.html">Log In</a></li>
             <li><a href="signup.html">Sign Up</a></li>
           </ul>
@@ -36,11 +40,13 @@
     </nav>
       <!-- First Container -->
     <div class="container-fluid bg-1 text-center">
+      <h1 id = "statement" class="margin">Sign in to your account</h1>
       <div id="signin">
         <div>
           <input id="email" type="text" placeholder="email"><br/><br/>
           <input id="password" type="password" placeholder="password"><br/><br/>
-          <button onclick="runSignIn();">Log in</button><br/>
+          <button onclick="runSignIn();">Log in</button><br/><br>
+          <a href="signup.html" class = "button1">Don't have an account? Sign Up</a>
         </div>
       </div>
     </div>

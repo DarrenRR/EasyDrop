@@ -15,7 +15,6 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyAm5YUmQecbnAsYWwKqox8uVucKumvRbxs"></script>
 
     <style>
-    body {font-family: Arial, Helvetica, sans-serif;}
     * {box-sizing: border-box}
     </style>
 
@@ -56,8 +55,8 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Find a Drop</a></li>
-            <li><a href="#">Offer a Drop </a></li>
+            <li><a href="Search.html">Find a Drop</a></li>
+            <li><a href="ShareRide.html">Offer a Drop </a></li>
             <li><a href="login.html">Log In</a></li>
             <li><a href="signup.html">Sign Up</a></li>
           </ul>
@@ -66,6 +65,7 @@
     </nav>
     <!-- First Container --> 
     <div class="container-fluid bg-1 text-center">
+      <h1 id = "statement" class="margin">Create an account</h1>
       <div id="signup">
         <div>
             <input id="fName" type="text" placeholder="First Name"><br/><br/>
@@ -93,10 +93,10 @@
 
 
       <!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
  
  <!--Main Firebase scripts-->
  <script src="js/initializefirebase.js"></script>
