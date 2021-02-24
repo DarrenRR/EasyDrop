@@ -73,12 +73,13 @@ driverAddBtn.addEventListener('click', (e) =>{
     var stopAddress = fullStopAddress[0];
     var stopTown = fullStopAddress[1];
 
+    var id = "ID" + (Math.floor(Math.random()*25)+1)
     //Assigns latitude and longitude for start and stop locations
     var startLatitude = document.getElementById("start_latitude").value;
     var startLongitude = document.getElementById("start_longitude").value;
     var stopLatitude = document.getElementById("stop_latitude").value;
     var stopLongitude = document.getElementById("stop_longitude").value;
-    db.collection("Trips").doc(email).set({
+    db.collection("Trips").doc(id).set({
         Username : username,
         FirstName: driverfname,
         LastName: driverlname, 
