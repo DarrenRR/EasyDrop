@@ -1,17 +1,4 @@
-const db= firebase.firestore();
-
-
-
-
-// ====================== Renders all data within the DB =====================
-    // cloudDB.collection("Passengers").get().then((snapshot) =>{
-    //     snapshot.docs.forEach(doc => {
-    //         console.log(doc.data())
-    //     })
-    // })
-// ====================== Renders all data within the DB =====================
-
-        
+const db= firebase.firestore(); 
 
     function renderTable(doc){
         let tbody=document.getElementById('requestsRender');
@@ -24,7 +11,11 @@ const db= firebase.firestore();
         let time=document.createElement('td');
         let date=document.createElement('td');
         let destination=document.createElement('td');
-        let edit=document.createElement('button'); 
+        let edit=document.createElement('input');
+        edit.setAttribute("type", "button");
+        edit.setAttribute("value", "Edit");
+        edit.setAttribute("onclick", "editRow(this)");
+
         let delete1=document.createElement('input');;
         delete1.setAttribute("type", "button");
         delete1.setAttribute("value", "Delete");
@@ -57,19 +48,69 @@ const db= firebase.firestore();
         
     }
 
-    db.collection("Trips").get().then((snapshot) =>{
-        snapshot.docs.forEach(doc => {
-            renderTable(doc);
-        });
-    });
+    
 
+    //===============Code edited from www.w3schools.com - No Copyright============ 
     function deleteRow(row) { //Code taken directly from w3Schools
         var i = row.parentNode.rowIndex;
         document.getElementById("myTable").deleteRow(i);
+
+        document.addEventListener('click', (e) =>{
+            e.preventDefault();
+            let id=e.target.parentElement.getAttribute('id');
+            db.collection("Trips").doc(id).delete();
+        });
+    }
+    //===============Code edited from www.w3schools.com - No Copyright============ 
+
+    function editRow(row) { //Code taken directly from w3Schools
+        // var i = row.parentNode.rowIndex;
+        // document.getElementById("myTable").deleteRow(i);
+
+        document.addEventListener('click', (e) =>{
+            e.preventDefault();
+            let id=e.target.parentElement.getAttribute('id');
+            db.collection("Trips").doc(id).delete();
+        });
     }
 
-    document.addEventListener('click', (e) =>{
-        e.preventDefault();
-        let id=e.target.parentElement.getAttribute('id');
-        db.collection("Trips").doc(id).delete();
+    // document.addEventListener('click', (e) =>{
+    //     e.preventDefault();
+        
+    //     const temp1={
+    //         FirstName: tempDfname,
+    //         LastName: tempDlname, 
+    //         Cell: tempDcell, 
+    //         AvailableSeats: tempDseats, 
+    //         Price: tempDprice, 
+    //         DriverLicense: tempDlicense,
+    //         AdditionalNotes: tempDdescription
+    //     };
+    //     let id=e.target.parentElement.getAttribute('id');
+    //     db.collection("Trips").doc(id).update(temp1);
+    // }); 
+
+
+// ============================= Renders only the user information ================================
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user){
+            //  Gets the user's information from firestore
+            email = user.email;
+            console.log(email);
+            const currUser = db.collection("users").where("Email", "==", email).get().then((snapshot) => {
+                snapshot.docs.forEach(result => {
+                    username = result.data().username;
+                    driverfname = result.data().firstName;
+                    driverlname = result.data().lastName;
+                    driveremailbox = result.data().email;
+                    drivercellbox = result.data().number;
+                })
+            })
+            db.collection("Trips").where("Email", "==", email).get().then((snapshot) =>{
+                snapshot.docs.forEach(doc => {
+                    renderTable(doc);
+                });
+            });
+            
+        }
     });
