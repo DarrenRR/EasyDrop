@@ -4,22 +4,43 @@ const db= firebase.firestore();
         let tbody=document.getElementById('requestsRender');
         let row=document.createElement('tr');
         let lname=document.createElement('td');
+        lname.setAttribute("id", "lnameD");
+
         let fname=document.createElement('td');
+        fname.setAttribute("id", "fnameD");
+
         // let email=document.createElement('td');
         let seats=document.createElement('td');
+        seats.setAttribute("id", "seatsD");
+
         let price=document.createElement('td');
+        price.setAttribute("id", "priceD");
+
         let time=document.createElement('td');
+        time.setAttribute("id", "timeD");
+
         let date=document.createElement('td');
+        date.setAttribute("id", "dateD");
+
         let destination=document.createElement('td');
+        destination.setAttribute("id", "destinationD");
+
         let edit=document.createElement('input');
         edit.setAttribute("type", "button");
         edit.setAttribute("value", "Edit");
+        edit.setAttribute("id", "driverEditBtn");
         edit.setAttribute("onclick", "editRow(this)");
 
-        let delete1=document.createElement('input');;
+        let delete1=document.createElement('input');
         delete1.setAttribute("type", "button");
         delete1.setAttribute("value", "Delete");
         delete1.setAttribute("onclick", "deleteRow(this)");
+
+        let save=document.createElement('input');
+        save.setAttribute("type", "button");
+        save.setAttribute("value", "Save");
+        save.setAttribute("onclick", "saveRow(this)");
+        
 // ==========================================================//
         row.setAttribute("id", doc.id);
         fname.innerHTML = doc.data().FirstName;
@@ -43,6 +64,7 @@ const db= firebase.firestore();
         row.appendChild(destination);
         row.appendChild(edit);
         row.appendChild(delete1);
+        row.appendChild(save);
         tbody.appendChild(row);
 // ==========================================================//    
         
@@ -63,32 +85,55 @@ const db= firebase.firestore();
     }
     //===============Code edited from www.w3schools.com - No Copyright============ 
 
-    function editRow(row) { //Code taken directly from w3Schools
-        // var i = row.parentNode.rowIndex;
-        // document.getElementById("myTable").deleteRow(i);
+        
+    function editRow(row) { //Code inspired from http://www.talkerscode.com/webtricks/add-edit-and-delete-rows-from-table-dynamically-using-javascript.php
+        var i = row.parentNode.rowIndex;
+        alert("Row index is: " + i);
+        var test=document.getElementById("driverEditBtn");
+        let fname=document.getElementById("fnameD");
+        let lname=document.getElementById("lnameD");
+        let seats=document.getElementById("seatsD");
+        let price=document.getElementById("priceD");
+        var fnamedata=fname.innerHTML;
+        var lnamedata=lname.innerHTML;
+        var pricedata=price.innerHTML;
+        var seatsdata=seats.innerHTML;
+        //================================= DISPLAYS A INPUT BOX =================================
+        fname.innerHTML="<input type='text' id='fnameEditBtn"+i+"' value='"+fnamedata+"'>";
+        lname.innerHTML="<input type='text' id='lnameEditBtn"+i+"' value='"+lnamedata+"'>";
+        price.innerHTML="<input type='text' id='priceEditBtn"+i+"' value='"+pricedata+"'>";
+        seats.innerHTML="<input type='text' id='seatsEditBtn"+i+"' value='"+seatsdata+"'>";
+        
+    } 
 
+    function saveRow(row){
+        //================================= SAVE DATE FROM THE INPUT BOX TO SCREEN=================================
+        var i = row.parentNode.rowIndex;
+        console.log("hello");
+        var fnameValue=document.getElementById("fnameEditBtn"+i).value;
+        var lnameValue=document.getElementById("lnameEditBtn"+i).value;
+        var priceValue=document.getElementById("priceEditBtn"+i).value;
+        var seatsValue=document.getElementById("seatsEditBtn"+i).value;
+        console.log(fnameValue);
+        document.getElementById("fnameD").innerHTML=fnameValue;
+        document.getElementById("lnameD").innerHTML=lnameValue;
+        document.getElementById("priceD").innerHTML=priceValue;
+        document.getElementById("seatsD").innerHTML=seatsValue;
+    
+       
         document.addEventListener('click', (e) =>{
             e.preventDefault();
+            console.log("hello");
+            const temp1={
+                FirstName: fnameValue,
+                LastName: lnameValue,  
+                AvailableSeats: seatsValue, 
+                Price: priceValue
+            };
             let id=e.target.parentElement.getAttribute('id');
-            db.collection("Trips").doc(id).delete();
+            db.collection("Trips").doc(id).update(temp1);
         });
     }
-
-    // document.addEventListener('click', (e) =>{
-    //     e.preventDefault();
-        
-    //     const temp1={
-    //         FirstName: tempDfname,
-    //         LastName: tempDlname, 
-    //         Cell: tempDcell, 
-    //         AvailableSeats: tempDseats, 
-    //         Price: tempDprice, 
-    //         DriverLicense: tempDlicense,
-    //         AdditionalNotes: tempDdescription
-    //     };
-    //     let id=e.target.parentElement.getAttribute('id');
-    //     db.collection("Trips").doc(id).update(temp1);
-    // }); 
 
 
 // ============================= Renders only the user information ================================
