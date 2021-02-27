@@ -1,17 +1,20 @@
 //Retrieve all carpools based on the user input
 var map;
+var startLocation;
+var stopLocation;
 
 async function getTrips(){
-    var startLocation = document.getElementById("start_location").value.split(',');
-    var stopLocation = document.getElementById("stop_location").value.split(',');
+    startLocation = document.getElementById("start_location").value.split(',');
+    stopLocation = document.getElementById("stop_location").value.split(',');
     var startTown = startLocation[1];
     var stopTown = stopLocation[1];
     var latitude = document.getElementById("start_latitude").value;
     var longitude = document.getElementById("stop_longitude").value;
+    var date = document.getElementById("date").value;
     //var mark = {lat: latitude, lng: longitude};
     var mark;
     console.log(startLocation);
-    var carpools = firebase.firestore().collection("Trips").where("StopTown", "==", stopTown).where("StartTown", "==", startTown).get();
+    var carpools = firebase.firestore().collection("Trips").where("StopTown", "==", stopTown).where("StartTown", "==", startTown).where("Date", "==", date).get();
     var resolved;
     carpools.catch(function(error){
         console.log(error);
@@ -41,13 +44,19 @@ function initMap(carpools, mark) {
   heading.appendChild(headingText);
   map = new google.maps.Map(document.getElementById("map"), options);
   carpools.forEach(function(result){
-    const contentString = "Driver's Name: "+ result.data().FirstName + '\n' + result.data().LastName +
+      
+    var button = document.createElement("button");
+    button.innerHTML = "Book a Seat";
+    button.addEventListener("click", reserveSeat(result, startLocation, stopLocation));
+    
+    const contentString = "Trip ID: " + result.id + "Driver's Name: "+ result.data().FirstName + '\n' + result.data().LastName +
     ' Available Seats: '+ result.data().AvailableSeats+
     ' Price: $'+ result.data().Price+
-    ' Destination: '+ result.data().StopAddress + ', ' + result.data().StopTown;
+    ' Destination: '+ result.data().StopAddress + ', ' + result.data().StopTown + '<button onclick="reserveSeat(result, startLocation, stopLocation)">Reserve a Seat</button>';//'<button type="button" class="btn btn-primary" onclick="#">Book a Seat</button>';
     var node = document.createElement("p");
     var textnode = document.createTextNode(contentString);
     node.appendChild(textnode);
+    node.appendChild(button);
     searchResults.appendChild(node);
     //document.getElementById("searchResults").appendChild(node);
     
@@ -55,6 +64,7 @@ function initMap(carpools, mark) {
     const infowindow = new google.maps.InfoWindow({
         content: contentString,
     });
+    //infowindow.appendChild(button);
     /*
     document.getElementById("searchResults").innerHTML = "Driver's Name: "+ result.data().FirstName + ' ' + result.data().LastName +
         ' Available Seats: '+ result.data().AvailableSeats+

@@ -55,10 +55,12 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="Search.html">Find a Drop</a></li>
-            <li><a href="ShareRide.html">Offer a Drop </a></li>
-            <li><a href="login.html">Log In</a></li>
-            <li><a href="signup.html">Sign Up</a></li>
+            <li class = "regular-options" style="display: none;"><a href="Search.html">Find a Drop</a></li>
+            <li class = "regular-options" style="display: none;"><a href="ShareRide.html">Offer a Drop </a></li>
+            <li class = "logged-out"  style="display: none;"><a href="login.html">Log In</a></li>
+            <li class = "logged-out"  style="display: none;"><a href="signup.html">Sign Up</a></li>
+            <li class = "logged-in"  style="display: none;"><a href="ManageTripsandPassengers.html">Dashboard</a></li>
+            <li class = "logged-in"  style="display: none;"><a href="login.html" onclick="signOut()">Log Out</a></li>
           </ul>
         </div>
       </div>
@@ -105,6 +107,7 @@
  <script src="js/authentication.js"></script>
  <script src="js/user.js"></script>
  <script src="js/signup.js"></script>
+ <script src="js/navbar.js"></script>
 
 </body>
 </html>

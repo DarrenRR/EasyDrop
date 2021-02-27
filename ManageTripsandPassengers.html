@@ -26,10 +26,12 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="Search.html">Find a Drop</a></li>
-                <li><a href="ShareRide.html">Offer a Drop </a></li>
-                <li><a href="login.html">Log In</a></li>
-                <li><a href="signup.html">Sign Up</a></li>
+                <li class = "regular-options" style="display: none;"><a href="Search.html">Find a Drop</a></li>
+                <li class = "regular-options" style="display: none;"><a href="ShareRide.html">Offer a Drop </a></li>
+                <li class = "logged-out"  style="display: none;"><a href="login.html">Log In</a></li>
+                <li class = "logged-out"  style="display: none;"><a href="signup.html">Sign Up</a></li>
+                <li class = "logged-in"  style="display: none;"><a href="ManageTripsandPassengers.html">Dashboard</a></li>
+                <li class = "logged-in"  style="display: none;"><a href="login.html" onclick="signOut()">Log Out</a></li>
             </ul>
         </div>
         </div>
@@ -54,6 +56,21 @@
                     
                 </tbody>
             </table>
+
+            <table class="table table-hover" id="mypassengerTable"> <!--table-hover-->
+                <thead class="thead-dark">
+                <tr style="background-color:grey">
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="row">Start Location</th>
+                    <th scope="row">Stop Location</th>
+                    <th scope="row">Decision</th>
+                </tr>
+                </thead>
+                <tbody id="passengerRequests">
+                    
+                </tbody>
+            </table>
         </main>
     </div>
     <!-- </div> -->
@@ -70,10 +87,13 @@
 <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
 <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+
 <!--Main Firebase scripts-->
 <script src="js/initializefirebase.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="js/manageTrips.js"></script>
+<script src="js/authentication.js"></script>
+<script src="js/navbar.js"></script>
     
 </body>
 </html>

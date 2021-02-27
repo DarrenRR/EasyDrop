@@ -41,19 +41,22 @@ firebase.auth().onAuthStateChanged((user) => {
 
 let driverseats =document.getElementById("seatsbox");
 let driverprice =document.getElementById("pricebox");
+let tripdate =document.getElementById("datebox");
 let numberplate =document.getElementById("licensebox");
 let driverdescription =document.getElementById("descriptionbox");
 
 
 
 
-let tempDfname, tempDlname, tempDemail, tempDcell, tempDseats, tempDprice, tempDlicense, tempDdescription; 
+
+let tempDfname, tempDlname, tempDemail, tempDdate, tempDcell, tempDseats, tempDprice, tempDlicense, tempDdescription; 
 
 function UpdateTrip(val, type){//this function updates the trip
     if (type=='fnameD') tempDfname=val;
     else if(type=='lnameD') tempDlname=val;
     else if(type=='emailD')  tempDemail=val;
     else if(type=='cellD') tempDcell=val;
+    else if(type=='dateD') tempDdate=val;
     else if(type=='seatsD') tempDseats=val;
     else if(type=='priceD') tempDprice=val;
     else if(type=='plateD') tempDlicense=val;
@@ -73,17 +76,19 @@ driverAddBtn.addEventListener('click', (e) =>{
     var stopAddress = fullStopAddress[0];
     var stopTown = fullStopAddress[1];
 
+    var id = Date.now().toString();                           
     //Assigns latitude and longitude for start and stop locations
     var startLatitude = document.getElementById("start_latitude").value;
     var startLongitude = document.getElementById("start_longitude").value;
     var stopLatitude = document.getElementById("stop_latitude").value;
     var stopLongitude = document.getElementById("stop_longitude").value;
-    db.collection("Trips").doc(email).set({
+    db.collection("Trips").doc(id).set({
         Username : username,
         FirstName: driverfname,
         LastName: driverlname, 
         Email: driveremailbox, 
         Cell: drivercellbox, 
+        Date: tempDdate,
         AvailableSeats: tempDseats, 
         Price: tempDprice, 
         DriverLicense: tempDlicense,
@@ -107,6 +112,7 @@ driverEditBtn.addEventListener('click', (e) =>{
         FirstName: tempDfname,
         LastName: tempDlname, 
         Cell: tempDcell, 
+        Date: tempDdate,
         AvailableSeats: tempDseats, 
         Price: tempDprice, 
         DriverLicense: tempDlicense,
