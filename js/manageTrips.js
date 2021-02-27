@@ -73,7 +73,7 @@ const db= firebase.firestore();
     
 
     //===============Code edited from www.w3schools.com - No Copyright============ 
-    function deleteRow(row) { //Code taken directly from w3Schools
+    function deleteRow(row) { 
         var i = row.parentNode.rowIndex;
         document.getElementById("myTable").deleteRow(i);
 
@@ -135,6 +135,58 @@ const db= firebase.firestore();
         });
     }
 
+    function renderpassengerTable(doc){
+        let tbody=document.getElementById('passengerRequests');
+        let row=document.createElement('tr');
+        let lname=document.createElement('td');
+        let fname=document.createElement('td');
+        let startloc=document.createElement('td');
+        let stoploc=document.createElement('td');
+
+        let accept=document.createElement('input');
+        accept.setAttribute("type", "button");
+        accept.setAttribute("value", "Accept");
+        accept.setAttribute("id", "driverAddBtn");
+        accept.setAttribute("onclick", "addPassenger(this)");
+
+        let decline=document.createElement('input');
+        decline.setAttribute("type", "button");
+        decline.setAttribute("value", "Decline");
+        decline.setAttribute("onclick", "declinePassenger(this)");
+        
+// ==========================================================//
+        row.setAttribute("data-id", doc.id);
+        fname.innerHTML = doc.data().FirstName;
+        lname.innerHTML = doc.data().LastName;
+        startloc.innerHTML = doc.data().StartLocation;
+        stoploc.innerHTML = doc.data().StopLocation;
+        accept.innerHTML = accept;
+        decline.innerHTML = decline;
+// ==========================================================//
+        row.appendChild(fname);
+        row.appendChild(lname);
+        row.appendChild(startloc);
+        row.appendChild(stoploc);
+
+        row.appendChild(accept);
+        row.appendChild(decline);
+        tbody.appendChild(row);
+// ==========================================================//    
+        
+    }
+
+    //===============Code edited from www.w3schools.com - No Copyright============
+    function declinePassenger(row) { 
+        var i = row.parentNode.rowIndex;
+        document.getElementById("mypassengerTable").deleteRow(i);
+
+        document.addEventListener('click', (e) =>{
+            e.preventDefault();
+            let id=e.target.parentElement.getAttribute('data-id');
+            db.collection("Bookings").doc(id).delete();
+        });
+    }
+    //===============Code edited from www.w3schools.com - No Copyright============
 
 // ============================= Renders only the user information ================================
     firebase.auth().onAuthStateChanged((user) => {
@@ -157,5 +209,13 @@ const db= firebase.firestore();
                 });
             });
             
+            db.collection("Bookings").where("Email", "==", email).get().then((snapshot) =>{
+                snapshot.docs.forEach(doc => {
+                    renderpassengerTable(doc)
+                });
+            });
+            
         }
     });
+
+    
