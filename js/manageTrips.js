@@ -186,6 +186,17 @@ const db= firebase.firestore();
             db.collection("Bookings").doc(id).delete();
         });
     }
+
+    function addPassenger(row) { 
+        var i = row.parentNode.rowIndex;
+        document.getElementById("mypassengerTable").deleteRow(i);
+
+        document.addEventListener('click', (e) =>{
+            e.preventDefault();
+            let id=e.target.parentElement.getAttribute('data-id');
+            db.collection("Bookings").doc(id).update({Accepted : true});
+        });
+    }
     //===============Code edited from www.w3schools.com - No Copyright============
 var email;
 var username;
@@ -214,11 +225,10 @@ var tripID;
             db.collection("Trips").where("Email", "==", email).get().then((snapshot) =>{
                 snapshot.docs.forEach(doc => {
                     renderTable(doc);
-                    db.collection("Bookings").where("TripId", "==", doc.id).get().then((snapshot2) => {
+                    db.collection("Bookings").where("TripId", "==", doc.id).where("Accepted", "==", false).get().then((snapshot2) => {
                         snapshot2.docs.forEach(doc2 => {
                             renderpassengerTable(doc2);
                         })
-
                     })
 
                 });

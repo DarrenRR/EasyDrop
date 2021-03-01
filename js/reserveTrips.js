@@ -37,6 +37,7 @@ function reserveSeat(carpool, start, stop){
                 StartLocation: start,
                 StopLocation:  stop,
                 TripId: tripID,
+                Accepted: false,
             });    
         }
     }).catch(function(error){

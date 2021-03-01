@@ -49,10 +49,12 @@ function initMap(carpools, mark) {
     button.innerHTML = "Book a Seat";
     button.addEventListener("click", reserveSeat(result, startLocation, stopLocation));
     
-    const contentString = "Trip ID: " + result.id + "Driver's Name: "+ result.data().FirstName + '\n' + result.data().LastName +
-    ' Available Seats: '+ result.data().AvailableSeats+
-    ' Price: $'+ result.data().Price+
-    ' Destination: '+ result.data().StopAddress + ', ' + result.data().StopTown + '<button onclick="reserveSeat(result, startLocation, stopLocation)">Reserve a Seat</button>';//'<button type="button" class="btn btn-primary" onclick="#">Book a Seat</button>';
+    const contentString = "Trip ID: " + result.id + '<br />' +
+    " Driver's Name: "+ result.data().FirstName  + result.data().LastName + ' <br />' +
+    " Available Seats: " + result.data().AvailableSeats+ '<br />' +
+    " Price: $"+ result.data().Price+ '<br />' +
+    "Destination: " + result.data().StopAddress + ", " + result.data().StopTown + '<br />' +
+    '<input type="button" onclick="reserveSeat(\''+result+'\',\''+startLocation+'\',\''+stopLocation+'\');" value="reserve"></input>';//"<input type='button', name='Reserve', value='Reserve', onclick='reserveSeat("+result+startLocation+stopLocation,")', id='NearbyEditButton'>"; //<button onclick="reserveSeat(result, startLocation, stopLocation)">Reserve a Seat</button>';//'<button type="button" class="btn btn-primary" onclick="#">Book a Seat</button>';
     var node = document.createElement("p");
     var textnode = document.createTextNode(contentString);
     node.appendChild(textnode);
