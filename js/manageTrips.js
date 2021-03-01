@@ -3,6 +3,7 @@ const db= firebase.firestore();
     function renderTable(doc){
         let tbody=document.getElementById('requestsRender');
         let row=document.createElement('tr');
+        let tripid=document.createElement('td');
         let lname=document.createElement('td');
         lname.setAttribute("id", "lnameD");
 
@@ -43,6 +44,7 @@ const db= firebase.firestore();
         
 // ==========================================================//
         row.setAttribute("id", doc.id);
+        tripid.innerHTML = doc.id;
         fname.innerHTML = doc.data().FirstName;
         lname.innerHTML = doc.data().LastName;
         seats.innerHTML = doc.data().AvailableSeats;
@@ -54,6 +56,7 @@ const db= firebase.firestore();
         edit.innerHTML = doc.data().Edit;//THIS IS TO BE A BUTTON
         delete1.innerHTML = doc.data().Delete;//THIS IS TO BE A BUTTON
 // ==========================================================//
+        row.appendChild(tripid);
         row.appendChild(fname);
         row.appendChild(lname);
         row.appendChild(seats);
@@ -142,6 +145,7 @@ const db= firebase.firestore();
         let fname=document.createElement('td');
         let startloc=document.createElement('td');
         let stoploc=document.createElement('td');
+        let tripid=document.createElement('td');
 
         let accept=document.createElement('input');
         accept.setAttribute("type", "button");
@@ -160,9 +164,11 @@ const db= firebase.firestore();
         lname.innerHTML = doc.data().LastName;
         startloc.innerHTML = doc.data().StartLocation;
         stoploc.innerHTML = doc.data().StopLocation;
+        tripid.innerHTML = doc.data().TripId;
         accept.innerHTML = accept;
         decline.innerHTML = decline;
 // ==========================================================//
+        row.appendChild(tripid);
         row.appendChild(fname);
         row.appendChild(lname);
         row.appendChild(startloc);
