@@ -224,10 +224,10 @@ const db= firebase.firestore();
             e.preventDefault();
             let id=e.target.parentElement.getAttribute('data-id');
             db.collection("Bookings").doc(id).update({Accepted : true});
-            document.getElementById("mypassengerTable").deleteRow(i);
+            document.getElementById("mypassengerTable").deleteRow(i);// this only deletes the row from the webpage directly
             // db.collection("Bookings").doc(id).delete();
             
-            db.collection("Reserved").doc(id).set(data);
+            db.collection("Reserved").doc(id).set(data);// not using this, this is dummy data
         });
     }
 
