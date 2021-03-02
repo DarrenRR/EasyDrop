@@ -3,12 +3,7 @@ const db= firebase.firestore();
     function renderTable(doc){
         let tbody=document.getElementById('requestsRender');
         let row=document.createElement('tr');
-        let lname=document.createElement('td');
-        lname.setAttribute("id", "lnameD");
-
-        let fname=document.createElement('td');
-        fname.setAttribute("id", "fnameD");
-
+        let tripid=document.createElement('td');
         // let email=document.createElement('td');
         let seats=document.createElement('td');
         seats.setAttribute("id", "seatsD");
@@ -43,8 +38,7 @@ const db= firebase.firestore();
         
 // ==========================================================//
         row.setAttribute("id", doc.id);
-        fname.innerHTML = doc.data().FirstName;
-        lname.innerHTML = doc.data().LastName;
+        tripid.innerHTML = doc.id;
         seats.innerHTML = doc.data().AvailableSeats;
         price.innerHTML = doc.data().Price;
         // email.innerHTML = doc.data().Email;
@@ -54,8 +48,7 @@ const db= firebase.firestore();
         edit.innerHTML = doc.data().Edit;//THIS IS TO BE A BUTTON
         delete1.innerHTML = doc.data().Delete;//THIS IS TO BE A BUTTON
 // ==========================================================//
-        row.appendChild(fname);
-        row.appendChild(lname);
+        row.appendChild(tripid);
         row.appendChild(seats);
         row.appendChild(price);
         row.appendChild(time);
@@ -67,7 +60,6 @@ const db= firebase.firestore();
         row.appendChild(save);
         tbody.appendChild(row);
 // ==========================================================//    
-        
     }
 
     
@@ -120,7 +112,6 @@ const db= firebase.firestore();
         document.getElementById("priceD").innerHTML=priceValue;
         document.getElementById("seatsD").innerHTML=seatsValue;
     
-       
         document.addEventListener('click', (e) =>{
             e.preventDefault();
             console.log("hello");
@@ -138,10 +129,18 @@ const db= firebase.firestore();
     function renderpassengerTable(doc){
         let tbody=document.getElementById('passengerRequests');
         let row=document.createElement('tr');
+        let tripid=document.createElement('td');
         let lname=document.createElement('td');
+        lname.setAttribute("id", "passengerlname");
+
         let fname=document.createElement('td');
+        fname.setAttribute("id", "passengerfname");
+
         let startloc=document.createElement('td');
+        startloc.setAttribute("id", "passengerstartloc");
+
         let stoploc=document.createElement('td');
+        stoploc.setAttribute("id", "passengerstoploc");
 
         let accept=document.createElement('input');
         accept.setAttribute("type", "button");
@@ -156,6 +155,7 @@ const db= firebase.firestore();
         
 // ==========================================================//
         row.setAttribute("data-id", doc.id);
+        tripid.innerHTML = doc.data().TripId;
         fname.innerHTML = doc.data().FirstName;
         lname.innerHTML = doc.data().LastName;
         startloc.innerHTML = doc.data().StartLocation;
@@ -163,6 +163,7 @@ const db= firebase.firestore();
         accept.innerHTML = accept;
         decline.innerHTML = decline;
 // ==========================================================//
+        row.appendChild(tripid);        
         row.appendChild(fname);
         row.appendChild(lname);
         row.appendChild(startloc);
@@ -171,8 +172,32 @@ const db= firebase.firestore();
         row.appendChild(accept);
         row.appendChild(decline);
         tbody.appendChild(row);
+// ==========================================================//        
+    }
+
+    function renderAcceptedPassengers(doc){
+        let tbody=document.getElementById('acceptedRequests');
+        let row=document.createElement('tr');
+        let tripid=document.createElement('td');
+        let lname=document.createElement('td');
+        let fname=document.createElement('td');
+        let startloc=document.createElement('td');
+        let stoploc=document.createElement('td');
+// ==========================================================//
+        row.setAttribute("data-id", doc.id);
+        tripid.innerHTML = doc.data().TripId;
+        fname.innerHTML = doc.data().FirstName;
+        lname.innerHTML = doc.data().LastName;
+        startloc.innerHTML = doc.data().StartLocation;
+        stoploc.innerHTML = doc.data().StopLocation;
+// ==========================================================//
+        row.appendChild(tripid);
+        row.appendChild(fname);
+        row.appendChild(lname);
+        row.appendChild(startloc);
+        row.appendChild(stoploc);
+        tbody.appendChild(row);
 // ==========================================================//    
-        
     }
 
     //===============Code edited from www.w3schools.com - No Copyright============
@@ -186,17 +211,36 @@ const db= firebase.firestore();
             db.collection("Bookings").doc(id).delete();
         });
     }
-
-    function addPassenger(row) { 
+    function addPassenger(row){
         var i = row.parentNode.rowIndex;
-        document.getElementById("mypassengerTable").deleteRow(i);
-
+        const data={
+            FirstName: document.getElementById("passengerfname").innerText,
+            LastName: document.getElementById("passengerlname").innerText,
+            StartLocation: document.getElementById("passengerstartloc").innerText,
+            Destination: document.getElementById("passengerstoploc").innerText
+        }
+        // document.getElementById("mypassengerTable").deleteRow(i);
         document.addEventListener('click', (e) =>{
             e.preventDefault();
             let id=e.target.parentElement.getAttribute('data-id');
             db.collection("Bookings").doc(id).update({Accepted : true});
+            document.getElementById("mypassengerTable").deleteRow(i);
+            // db.collection("Bookings").doc(id).delete();
+            
+            db.collection("Reserved").doc(id).set(data);
         });
     }
+
+    // function addPassenger(row) { 
+    //     // 
+    //     // document.getElementById("mypassengerTable").deleteRow(i);
+
+    //     document.addEventListener('click', (e) =>{
+    //         e.preventDefault();
+    //         let id=e.target.parentElement.getAttribute('data-id');
+    //         db.collection("Bookings").doc(id).update({Accepted : true});
+    //     });
+    // }
     //===============Code edited from www.w3schools.com - No Copyright============
 var email;
 var username;
@@ -225,9 +269,14 @@ var tripID;
             db.collection("Trips").where("Email", "==", email).get().then((snapshot) =>{
                 snapshot.docs.forEach(doc => {
                     renderTable(doc);
-                    db.collection("Bookings").where("TripId", "==", doc.id).where("Accepted", "==", false).get().then((snapshot2) => {
+                    db.collection("Bookings").where("TripId", "==", doc.id).get().then((snapshot2) => {
                         snapshot2.docs.forEach(doc2 => {
                             renderpassengerTable(doc2);
+                        })
+                    })
+                    db.collection("Bookings").where("TripId", "==", doc.id).where("Accepted", "==", true).get().then((snapshot3) => {
+                        snapshot3.docs.forEach(doc3 => {
+                            renderAcceptedPassengers(doc3);
                         })
                     })
 

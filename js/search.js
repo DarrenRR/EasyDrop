@@ -50,7 +50,7 @@ function initMap(carpools, mark) {
     button.addEventListener("click", reserveSeat(result, startLocation, stopLocation));
     
     const contentString = "Trip ID: " + result.id + '<br />' +
-    " Driver's Name: "+ result.data().FirstName  + result.data().LastName + ' <br />' +
+    " Driver's Name: "+ result.data().FirstName  + result.data().LastName +  '<br />' +
     " Available Seats: " + result.data().AvailableSeats+ '<br />' +
     " Price: $"+ result.data().Price+ '<br />' +
     "Destination: " + result.data().StopAddress + ", " + result.data().StopTown + '<br />' +
