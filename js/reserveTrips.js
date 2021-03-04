@@ -34,6 +34,7 @@ function reserveSeat(carpool, start, stop){
                 Username : username,
                 FirstName: firstName,
                 LastName: lastName,
+                Email: userEmail,
                 StartLocation: start,
                 StopLocation:  stop,
                 TripId: tripID,
