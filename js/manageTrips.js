@@ -4,6 +4,7 @@ const db= firebase.firestore();
         let tbody=document.getElementById('requestsRender');
         let row=document.createElement('tr');
         let tripid=document.createElement('td');
+        tripid.setAttribute("id", "tripidD");
         // let email=document.createElement('td');
         let seats=document.createElement('td');
         seats.setAttribute("id", "seatsD");
@@ -82,17 +83,23 @@ const db= firebase.firestore();
         var i = row.parentNode.rowIndex;
         alert("Row index is: " + i);
         var test=document.getElementById("driverEditBtn");
-        let fname=document.getElementById("fnameD");
-        let lname=document.getElementById("lnameD");
+        let tripid=document.getElementById("tripidD");
+        // let fname=document.getElementById("fnameD");
+        // let lname=document.getElementById("lnameD");
         let seats=document.getElementById("seatsD");
         let price=document.getElementById("priceD");
-        var fnamedata=fname.innerHTML;
-        var lnamedata=lname.innerHTML;
+
+        console.log('hello bitch1');
+        var tripiddata= tripid.innerText;
+        // var fnamedata=fname.innerHTML;
+        // var lnamedata=lname.innerHTML;
         var pricedata=price.innerHTML;
         var seatsdata=seats.innerHTML;
+        console.log('hello bitch2');
         //================================= DISPLAYS A INPUT BOX =================================
-        fname.innerHTML="<input type='text' id='fnameEditBtn"+i+"' value='"+fnamedata+"'>";
-        lname.innerHTML="<input type='text' id='lnameEditBtn"+i+"' value='"+lnamedata+"'>";
+        tripid.innerHTML="<input type='text' id='tripidEditBtn"+i+"' value='"+tripiddata+"' disabled='disabled'>";
+        // fname.innerHTML="<input type='text' id='fnameEditBtn"+i+"' value='"+fnamedata+"'>";
+        // lname.innerHTML="<input type='text' id='lnameEditBtn"+i+"' value='"+lnamedata+"'>";
         price.innerHTML="<input type='text' id='priceEditBtn"+i+"' value='"+pricedata+"'>";
         seats.innerHTML="<input type='text' id='seatsEditBtn"+i+"' value='"+seatsdata+"'>";
         
@@ -102,13 +109,15 @@ const db= firebase.firestore();
         //================================= SAVE DATE FROM THE INPUT BOX TO SCREEN=================================
         var i = row.parentNode.rowIndex;
         console.log("hello");
-        var fnameValue=document.getElementById("fnameEditBtn"+i).value;
-        var lnameValue=document.getElementById("lnameEditBtn"+i).value;
+        var tripidValue= document.getElementById("tripidEditBtn"+i).value; 
+        // var fnameValue=document.getElementById("fnameEditBtn"+i).value;
+        // var lnameValue=document.getElementById("lnameEditBtn"+i).value;
         var priceValue=document.getElementById("priceEditBtn"+i).value;
         var seatsValue=document.getElementById("seatsEditBtn"+i).value;
-        console.log(fnameValue);
-        document.getElementById("fnameD").innerHTML=fnameValue;
-        document.getElementById("lnameD").innerHTML=lnameValue;
+        console.log(tripidValue);
+        document.getElementById("tripidD").innerHTML=tripidValue;
+        // document.getElementById("fnameD").innerHTML=fnameValue;
+        // document.getElementById("lnameD").innerHTML=lnameValue;
         document.getElementById("priceD").innerHTML=priceValue;
         document.getElementById("seatsD").innerHTML=seatsValue;
     
@@ -116,8 +125,8 @@ const db= firebase.firestore();
             e.preventDefault();
             console.log("hello");
             const temp1={
-                FirstName: fnameValue,
-                LastName: lnameValue,  
+                // FirstName: fnameValue,
+                // LastName: lnameValue,  
                 AvailableSeats: seatsValue, 
                 Price: priceValue
             };
@@ -130,6 +139,8 @@ const db= firebase.firestore();
         let tbody=document.getElementById('passengerRequests');
         let row=document.createElement('tr');
         let tripid=document.createElement('td');
+        tripid.setAttribute("id", "passengertripid");
+
         let lname=document.createElement('td');
         lname.setAttribute("id", "passengerlname");
 
@@ -212,84 +223,104 @@ const db= firebase.firestore();
         });
     }
     function addPassenger(row){
-        var i = row.parentNode.rowIndex;
+        var i = row.parentNode.parentNode.rowIndex;
         const data={
+            TripId: document.getElementById("passengertripid").innerText,
             FirstName: document.getElementById("passengerfname").innerText,
             LastName: document.getElementById("passengerlname").innerText,
             StartLocation: document.getElementById("passengerstartloc").innerText,
-            Destination: document.getElementById("passengerstoploc").innerText
+            StopLocation: document.getElementById("passengerstoploc").innerText
         }
-        // document.getElementById("mypassengerTable").deleteRow(i);
+        console.log(data);
+        document.getElementById("mypassengerTable").deleteRow(i);
         document.addEventListener('click', (e) =>{
             e.preventDefault();
             let id=e.target.parentElement.getAttribute('data-id');
             db.collection("Bookings").doc(id).update({Accepted : true});
             document.getElementById("mypassengerTable").deleteRow(i);// this only deletes the row from the webpage directly
-            // db.collection("Bookings").doc(id).delete();
             
-            db.collection("Reserved").doc(id).set(data);// not using this, this is dummy data
+            db.collection("Bookings").doc(id).delete();
+            db.collection("Reserved").doc(id).set(data);
         });
     }
 
-    // function addPassenger(row) { 
-    //     // 
-    //     // document.getElementById("mypassengerTable").deleteRow(i);
+    function rendermyTrips(doc){
+        let tbody=document.getElementById('myTrips');
+        let row=document.createElement('tr');
+        let tripid=document.createElement('td');
+        let lname=document.createElement('td');
+        let fname=document.createElement('td');
+        let startloc=document.createElement('td');
+        let stoploc=document.createElement('td');
+// ==========================================================//
+        row.setAttribute("data-id", doc.id);
+        tripid.innerHTML = doc.data().TripId;
+        fname.innerHTML = doc.data().FirstName;
+        lname.innerHTML = doc.data().LastName;
+        startloc.innerHTML = doc.data().StartLocation;
+        stoploc.innerHTML = doc.data().StopLocation;
+       
+// ==========================================================//
+        row.appendChild(tripid);        
+        row.appendChild(fname);
+        row.appendChild(lname);
+        row.appendChild(startloc);
+        row.appendChild(stoploc);
+        tbody.appendChild(row);
+// ==========================================================//        
+    }
 
-    //     document.addEventListener('click', (e) =>{
-    //         e.preventDefault();
-    //         let id=e.target.parentElement.getAttribute('data-id');
-    //         db.collection("Bookings").doc(id).update({Accepted : true});
-    //     });
-    // }
     //===============Code edited from www.w3schools.com - No Copyright============
-var email;
-var username;
-var passengerFName;
-var passengerLName;
-var passengerStart;
-var passengerStop;
-var tripID;
+    var email;
+    var username;
+    var passengerFName;
+    var passengerLName;
+    var passengerStart;
+    var passengerStop;
+    var tripID;
 // ============================= Renders only the user information ================================
+
     firebase.auth().onAuthStateChanged((user) => {
         if (user){
             //  Gets the user's information from firestore
             email = user.email;
             console.log(email);
+            
             const currUser = db.collection("users").where("Email", "==", email).get().then((snapshot) => {
                 snapshot.docs.forEach(result => {
                     username = result.data().username;
-                    /*
                     driverfname = result.data().firstName;
                     driverlname = result.data().lastName;
+                    /*
                     driveremailbox = result.data().email;
                     drivercellbox = result.data().number;
                     */
                 })
+                console.log(user.FirstName);
             })
             db.collection("Trips").where("Email", "==", email).get().then((snapshot) =>{
                 snapshot.docs.forEach(doc => {
-                    renderTable(doc);
+                    renderTable(doc);// when a use logs in, all his/her sharedtrips appears here
                     db.collection("Bookings").where("TripId", "==", doc.id).get().then((snapshot2) => {
                         snapshot2.docs.forEach(doc2 => {
-                            renderpassengerTable(doc2);
+                            renderpassengerTable(doc2); //when a user request to reserve a seat in logged in user carpool, it goes here
                         })
                     })
-                    db.collection("Bookings").where("TripId", "==", doc.id).where("Accepted", "==", true).get().then((snapshot3) => {
+                    db.collection("Reserved").where("TripId", "==", doc.id).get().then((snapshot3) => { //
                         snapshot3.docs.forEach(doc3 => {
-                            renderAcceptedPassengers(doc3);
+                            renderAcceptedPassengers(doc3);// when a logged in user accepts a request, it appears here
                         })
                     })
-
+                    
+                    
                 });
+               
             });
-            
-            /*
-            db.collection("Bookings").where("Email", "==", email).get().then((snapshot) =>{
-                snapshot.docs.forEach(doc => {
-                    renderpassengerTable(doc)
-                });
-            });
-            */
+            db.collection("Bookings").where("Email", "==", email).get().then((snapshot4) => { //
+                snapshot4.docs.forEach(doc4 => {
+                    rendermyTrips(doc4);// shows logged in user trips 
+                })
+            })
             
         }
     });
