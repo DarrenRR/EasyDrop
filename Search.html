@@ -7,12 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/styles.css"/>
-  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Google Maps API-->
+  <script defer src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyAm5YUmQecbnAsYWwKqox8uVucKumvRbxs"></script>
+  <script type="text/javascript" src="js/search.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-  <!-- Google Maps API-->
-  <script async src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyAm5YUmQecbnAsYWwKqox8uVucKumvRbxs"></script>
   <style>
 
     .bg-1 { 
@@ -29,6 +31,7 @@
   </style>
 
 <script>
+    
     var startInput = 'start_input';
 
     $(document).ready(function () {
@@ -45,7 +48,7 @@
             var start_location = document.getElementById("start_input").value;
             document.getElementById('start_location').value = start_location;
             document.getElementById('start_latitude').value = near_place.geometry.location.lat();
-            document.getElementById('stop_longitude').value = near_place.geometry.location.lng();
+            document.getElementById('start_longitude').value = near_place.geometry.location.lng();
         });
     });
 
@@ -57,14 +60,15 @@
             types: ['geocode'],
             componentRestrictions: {
             country: "tt"
-  }
+        }
         });
       
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var near_place = autocomplete.getPlace();
-            console.log(autocomplete);
             var stop_location = document.getElementById("destination_input").value;
             document.getElementById('stop_location').value = stop_location;
+            document.getElementById('stop_latitude').value = near_place.geometry.location.lat();
+            document.getElementById('stop_longitude').value = near_place.geometry.location.lng();
         });
     });
   </script>
@@ -138,7 +142,7 @@
   <button type="button" class="btn btn-primary" onclick="getTrips()">Search</button><br>
   
   <br><h5 class="container-fluid text-left" id = "results"></h5>
-  <div id = "searchResults">
+  <div id = "searchResults" style="display:none">
   </div>
   <!--
   
@@ -174,9 +178,12 @@
 
 
 <!-- Second Container -->
-<div class="container-fluid bg-2 text-left" id="mapview">
+<div class="container-fluid bg-2 text-left" id="mapview" style="display: none;">
   <div id = "map"></div>
 </div>
+
+
+
 
 <!-- Footer -->
 <footer class="container-fluid bg-4 text-center">
@@ -195,8 +202,6 @@
  <!--Main Firebase scripts-->
  <script src="js/initializefirebase.js"></script>
  <script src="js/authentication.js"></script>
- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
- <script src="js/search.js"></script>
  <script src="js/user.js"></script>
  <script src="js/reserveTrips.js"></script>
  <script src="js/login.js"></script>
@@ -204,7 +209,3 @@
 
 </body>
 </html>
-
-<!--SEARCH BUTTON <a href="#" class="btn btn-default btn-lg">
-  <span class="glyphicon glyphicon-search"></span> Search
-</a> -->

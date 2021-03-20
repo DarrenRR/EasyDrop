@@ -3,7 +3,12 @@ body {
     line-height: 1.8;
     color: #f5f6f7;
   }
-  p {font-size: 16px;}
+  p {
+    line-height: 1 ;
+    margin-top: 0em ;
+    margin-bottom: 2em ;
+    font-size: 16px;
+  }
   .margin {margin-bottom: 45px;}
   .bg-1 { 
     background-color: #39b485; /* Green */
@@ -71,6 +76,8 @@ body {
     text-decoration: solid;
     font-weight: 600;
     font-size: 35px;
+    margin-bottom: 0;
+    padding: 0;
   }
 
   img{
@@ -152,6 +159,12 @@ body {
       font-weight: bold;
   }
 
+  #features{
+    color: rgb(32, 91, 158);
+    font-weight: bold;
+    font-size: 24px;
+}
+
   #map {
     height: 100%;
   }
@@ -159,4 +172,21 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
+  }
+
+  td, th{
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  td{
+    font-size: 14px;
+  }
+
+  .decisions{
+    font-size: 10px;
+  }
+
+  .decisions-2{
+    font-size: 9px;
   }

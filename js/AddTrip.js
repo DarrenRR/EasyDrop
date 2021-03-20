@@ -102,6 +102,7 @@ driverAddBtn.addEventListener('click', (e) =>{
         StopLat : stopLatitude,
         StopLng : stopLongitude,
     });
+    alert("Your trip was successfully created!");
 }); //adds data using the button
             
             // ------------ EDIT DATA SPECIFIED DB (works with forms only!)-----------------------
