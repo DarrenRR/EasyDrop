@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Theme Made By www.w3schools.com - No Copyright -->
+  <title>EasyDrop</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="index.html">EasyDrop</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li class = "regular-options" style="display: none;"><a href="Search.html">Find a Drop</a></li>
+        <li class = "regular-options" style="display: none;"><a href="ShareRide.html">Offer a Drop </a></li>
+        <li class = "logged-out"  style="display: none;"><a href="login.html">Log In</a></li>
+        <li class = "logged-out"  style="display: none;"><a href="signup.html">Sign Up</a></li>
+        <li class = "logged-in"  style="display: none;"><a href="ManageTripsandPassengers.html">Dashboard</a></li>
+        <li class = "logged-in"  style="display: none;"><a href="login.html" onclick="signOut()">Log Out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- First Container -->
+<div class="container-fluid bg-1 text-center">
+  <h1 id = "statement" class="margin">Reach your destination with some company.</h1>
+  <img src="images/homepage.png"   style="display:inline" alt="Carpool" >
+  <div class="buttons"></div>
+  <br>
+    <a href="Search.html" class="button1">Find a Drop</a>
+    <a href="ShareRide.html" class="button1">Offer a Drop</a>
+  </div>
+</div>
+
+<!-- Second Container 
+<div class="container-fluid bg-2 text-center">
+  <h3 class="margin">What Am I?</h3>
+  <a href="#" class="btn btn-default btn-lg">
+    <span class="glyphicon glyphicon-search"></span> Search
+  </a>
+  
+</div>
+-->
+
+
+ <!-- Third Container (Grid) -->
+<div class="container-fluid bg-3 text-center">    
+  <div class="row">
+    <div class="col-sm-4">
+      <h1 id="features">Quick and Easy</h1>
+      <p>Find carpools suited to your locations.</p>
+      <img src="images/find.png" class="img-responsive margin" style="display:inline;"width:350px;height:300px alt="Image">
+    </div>
+    <div class="col-sm-4"> 
+      <h1 id="features" >Safe</h1>
+      <p>All users are verified.</p>
+      <img src="images/verified.png" class="img-responsive margin" style="display:inline;" alt="Image"/>
+    </div>
+    <div class="col-sm-4"> 
+      <h1 id="features">Multiple Stops</h1>
+      <p>We'll provide the quickest route to save time.</p>
+      <img src="images/routes.png" class="img-responsive margin" style="display:inline;"width:400px;height:280px alt="Image">
+    </div>
+  </div>
+</div>
+
+
+<!-- Footer -->
+<footer class="container-fluid bg-4 text-center">
+  <p>EasyDrop by RMD Technologies</p> 
+</footer>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+ 
+ <!--Main Firebase scripts-->
+ <script src="js/initializefirebase.js"></script>
+ 
+ <!--JS scripts-->
+ <script src="js/authentication.js"></script>
+ <script src="js/user.js"></script>
+ <script src="js/login.js"></script>
+ <script src="js/navbar.js"></script>
+
+</body>
+</html>
+

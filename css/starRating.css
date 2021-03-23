@@ -1,0 +1,58 @@
+.fa-star{
+  font-size:3rem;
+  cursor: pointer;
+  margin:0px;
+}
+/* .container, html, body{
+  background-color: lightblue;
+} */
+.fa-star:before {
+  content: "\f005"; }
+
+
+
+
+
+
+
+
+
+
+
+/* @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+* {
+    font-family: 'Poppins', sans-serif !important;  
+    font-weight: 900; 
+  }  */
+
+/* 
+
+.container .star-widget input{
+    display: none;
+} 
+
+.star-widget label{
+    font-size: 40px;
+    color: #444;
+    padding: 10px;
+    float: right;
+    transition: all 0.2s ease;
+}
+
+input:not(:checked) ~ label:hover,
+input:not(:checked) ~ label:hover ~ label{
+    color: #fd4;
+}
+
+input:checked ~ label{
+    color: #fd4;
+}
+
+#rate-5:checked ~ form header:before{
+    content: "Very satisfied";
+    color: gold;
+}
+ */
+
+
