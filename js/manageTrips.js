@@ -433,18 +433,23 @@ const db= firebase.firestore();
     // ============= S T A R    R A T I N G S     F U N C T I O N S
 
 const stars= [false, false, false, false, false];
+const ease= [false, false, false, false, false];//Ease of carpool booking
+const safety= [false, false, false, false, false];//feeling of safety
+const comfort= [false, false, false, false, false];//ride comfort
+const knowledge= [false, false, false, false, false];//driver knowledge of routes
+const overall= [false, false, false, false, false];//overall customer service
+
 function giveReview(row){
     var i = row.parentNode.rowIndex;
     var table= document.getElementById("myTrips"); 
     var getTripId= table.rows[i].cells[0].innerHTML;
     alert(getTripId);
     var id = Date.now().toString(); 
-    // let movieName=document.getElementById("movieName");
     db.collection('Reviews').doc(id).set({
-        // FirstName: firstName,
         Email: email,
         TripId: getTripId,//movieName.value,
-        rating: stars
+        Punctuality: stars
+        
     });
     
     db.collection("Reviews").where("TripId", "==", getTripId).get().then((snapshot) =>{
@@ -453,12 +458,52 @@ function giveReview(row){
             `<div class="row" id="${doc.id}">
                  <div class="col">
                     <h6>Trip ID: ${getTripId}</h6>
-                    <h6>Rating: </h6>
-                    <i onmouseover="color('${doc.id}','0')" onclick="mark('${doc.data().TripId}', '${doc.id}','0')"  id="${'star'+doc.id+0}" class="fas fa-star"></i>
-                    <i onmouseover="color('${doc.id}','1')" onclick="mark('${doc.data().TripId}', '${doc.id}','1')"  id="${'star'+doc.id+1}" class="fas fa-star"></i>
-                    <i onmouseover="color('${doc.id}','2')" onclick="mark('${doc.data().TripId}', '${doc.id}','2')"  id="${'star'+doc.id+2}" class="fas fa-star"></i>
-                    <i onmouseover="color('${doc.id}','3')" onclick="mark('${doc.data().TripId}', '${doc.id}','3')"  id="${'star'+doc.id+3}" class="fas fa-star"></i>
-                    <i onmouseover="color('${doc.id}','4')" onclick="mark('${doc.data().TripId}', '${doc.id}','4')"  id="${'star'+doc.id+4}" class="fas fa-star"></i>
+                    <h6>Punctuality: </h6>
+                    <i onclick="mark('${doc.data().TripId}', '${doc.id}','0')"  id="${'star'+doc.id+0}" class="fas fa-star"></i>
+                    <i onclick="mark('${doc.data().TripId}', '${doc.id}','1')"  id="${'star'+doc.id+1}" class="fas fa-star"></i>
+                    <i onclick="mark('${doc.data().TripId}', '${doc.id}','2')"  id="${'star'+doc.id+2}" class="fas fa-star"></i>
+                    <i onclick="mark('${doc.data().TripId}', '${doc.id}','3')"  id="${'star'+doc.id+3}" class="fas fa-star"></i>
+                    <i onclick="mark('${doc.data().TripId}', '${doc.id}','4')"  id="${'star'+doc.id+4}" class="fas fa-star"></i>
+                </div>
+                <div class="col">
+                    <h6>Ease of booking carpool: </h6>
+                    <i onclick="mark1('${doc.id}','0')" id="${'ease'+doc.id+0}" class="fas fa-star"></i>
+                    <i onclick="mark1('${doc.id}','1')" id="${'ease'+doc.id+1}" class="fas fa-star"></i>
+                    <i onclick="mark1('${doc.id}','2')" id="${'ease'+doc.id+2}" class="fas fa-star"></i>
+                    <i onclick="mark1('${doc.id}','3')" id="${'ease'+doc.id+3}" class="fas fa-star"></i>
+                    <i onclick="mark1('${doc.id}','4')" id="${'ease'+doc.id+4}" class="fas fa-star"></i>
+                </div>
+                <div class="col">
+                    <h6>Feeling of Safety for the Entire Ride: </h6>
+                    <i onclick="mark2('${doc.id}','0')" id="${'safety'+doc.id+0}" class="fas fa-star"></i>
+                    <i onclick="mark2('${doc.id}','1')" id="${'safety'+doc.id+1}" class="fas fa-star"></i>
+                    <i onclick="mark2('${doc.id}','2')" id="${'safety'+doc.id+2}" class="fas fa-star"></i>
+                    <i onclick="mark2('${doc.id}','3')" id="${'safety'+doc.id+3}" class="fas fa-star"></i>
+                    <i onclick="mark2('${doc.id}','4')" id="${'safety'+doc.id+4}" class="fas fa-star"></i>
+                </div>
+                <div class="col">
+                    <h6>Ride Comfort: </h6>
+                    <i onclick="mark3('${doc.id}','0')" id="${'comfort'+doc.id+0}" class="fas fa-star"></i>
+                    <i onclick="mark3('${doc.id}','1')" id="${'comfort'+doc.id+1}" class="fas fa-star"></i>
+                    <i onclick="mark3('${doc.id}','2')" id="${'comfort'+doc.id+2}" class="fas fa-star"></i>
+                    <i onclick="mark3('${doc.id}','3')" id="${'comfort'+doc.id+3}" class="fas fa-star"></i>
+                    <i onclick="mark3('${doc.id}','4')" id="${'comfort'+doc.id+4}" class="fas fa-star"></i>
+                </div>
+                <div class="col">
+                    <h6>Driver's Knowledge: </h6>
+                    <i onclick="mark4('${doc.id}','0')" id="${'knowledge'+doc.id+0}" class="fas fa-star"></i>
+                    <i onclick="mark4('${doc.id}','1')" id="${'knowledge'+doc.id+1}" class="fas fa-star"></i>
+                    <i onclick="mark4('${doc.id}','2')" id="${'knowledge'+doc.id+2}" class="fas fa-star"></i>
+                    <i onclick="mark4('${doc.id}','3')" id="${'knowledge'+doc.id+3}" class="fas fa-star"></i>
+                    <i onclick="mark4('${doc.id}','4')" id="${'knowledge'+doc.id+4}" class="fas fa-star"></i>
+                </div>
+                <div class="col">
+                    <h6>Overall Customer Service: </h6>
+                    <i onclick="mark5('${doc.id}','0')" id="${'overall'+doc.id+0}" class="fas fa-star"></i>
+                    <i onclick="mark5('${doc.id}','1')" id="${'overall'+doc.id+1}" class="fas fa-star"></i>
+                    <i onclick="mark5('${doc.id}','2')" id="${'overall'+doc.id+2}" class="fas fa-star"></i>
+                    <i onclick="mark5('${doc.id}','3')" id="${'overall'+doc.id+3}" class="fas fa-star"></i>
+                    <i onclick="mark5('${doc.id}','4')" id="${'overall'+doc.id+4}" class="fas fa-star"></i>
                 </div>
                 <br>
                 <div class="row">
@@ -471,34 +516,27 @@ function giveReview(row){
                         </div>
                     </form>
                 </div>
-
             </div><br>`; 
             
         });
     });
 }
 
-
-
-
 // Code inspired from https://www.youtube.com/watch?v=DVxN9lLUu9I&list=PLS95rOLXf_7GyPOE5_xtC1ADxykyetQS8&index=8
-function color(key, star){
-    for (let index=0; index<=star;index++){
-        document.getElementById('star'+key+(index)).style.color="orange";
-    }
-}
-
 function mark(name, key, star){ // this is to mark the star ONLY!
     for (let index=0; index <= star;index++){
         stars[index]=true;
+        if(stars[index]=true){
+            document.getElementById('star'+key+(index)).style.color="orange";
+        }
     }
     db.collection('Reviews').doc(key).set({
         // FirstName: firstName,
         Email: email,
         TripId: name,
-        rating:stars
+        Punctuality:stars
     });
-    stars= [false, false, false, false, false];
+    // stars= [false, false, false, false, false];
 }
 // ======================== End of reused code ============================
 
@@ -511,7 +549,89 @@ function giveDescription(key){
     textarea.value='';
 }
 
+function mark1(key,star){ 
+    let index=0
+    if(index>=0){
+        for (index=0; index <= star;index++){
+            ease[index]=true;
+            document.getElementById('ease'+key+(index)).style.color="orange";
+        }
+    }
+    else{
+        ease[index]=false;
+    }
+    console.log('EaseofBooking:'+ease);
+    db.collection('Reviews').doc(key).update({
+        EaseofBooking: ease
+    });
+    
+}
 
+function mark2( key, star){ // this is to mark the star ONLY!
+    let index=0
+    if(index>=0){
+        for (index=0; index <= star;index++){
+            safety[index]=true;
+            document.getElementById('safety'+key+(index)).style.color="orange";
+        }
+    }
+    else{
+        safety[index]=false;
+    }
+    console.log('Safety:'+safety);
+    db.collection('Reviews').doc(key).update({
+        FeelingofSafety: safety
+    });
+}
+function mark3(key, star){ // this is to mark the star ONLY!
+    let index=0
+    if(index>=0){
+        for (index=0; index <= star;index++){
+            comfort[index]=true;
+            document.getElementById('comfort'+key+(index)).style.color="orange";
+        }
+    }
+    else{
+        comfort[index]=false;
+    }
+    console.log('comfort:'+comfort);
+    db.collection('Reviews').doc(key).update({
+        RideComfort: comfort
+    });
+}
+function mark4(key, star){ // this is to mark the star ONLY!
+    let index=0
+    if(index>=0){
+        for (index=0; index <= star;index++){
+            knowledge[index]=true;
+            document.getElementById('knowledge'+key+(index)).style.color="orange";
+        }
+    }
+    else{
+        knowledge[index]=false;
+    }
+    console.log('Knowledge:'+knowledge);
+    db.collection('Reviews').doc(key).update({
+        
+        DriverKnowledge: knowledge
+    });
+}
+function mark5(key, star){ // this is to mark the star ONLY!
+    let index=0
+    if(index>=0){
+        for (index=0; index <= star;index++){
+            overall[index]=true;
+            document.getElementById('overall'+key+(index)).style.color="orange";
+        }
+    }
+    else{
+        overall[index]=false;
+    }
+    console.log('overall:'+overall);
+    db.collection('Reviews').doc(key).update({
+        OverallExperience: overall
+    });
+}
 
 //  ===================== R E N D E R I N G         R E V I E W S ======================
 
@@ -533,12 +653,12 @@ function renderReviews(doc){
 // ==========================================================//
     paragraph.innerHTML ='User ' +doc.data().Email+' review about '+ doc.data().TripId+ ':';
     row.appendChild(paragraph); 
-    for(let index=0; index < doc.data().rating.length; index++){
-        if(doc.data().rating[index]==true){
+    for(let index=0; index < doc.data().Punctuality.length; index++){
+        if(doc.data().Punctuality[index]==true){
             icon.innerHTML+=`<i class="fas fa-star" style="color:orange"></i>`
             row.appendChild(icon);
         }
-        if(doc.data().rating[index]==false){
+        if(doc.data().Punctuality[index]==false){
             icon.innerHTML+=`<i class="fas fa-star" style="color:initial"></i>`
             row.appendChild(icon);
         }
@@ -550,18 +670,10 @@ function renderReviews(doc){
 
 db.collection("Reviews").get().then((snapshot) =>{
     snapshot.docs.forEach(doc => {
-        if(doc.data().rating[0]==true){
-            console.log(doc.data().rating[0]);
+        if(doc.data().Punctuality[0]==true){
+            console.log(doc.data().Punctuality[0]);
             renderReviews(doc);// when a use logs in, all his/her sharedtrips appears here
         }
     });
    
 });
-
-
-
-
-
-
-
-
