@@ -119,7 +119,46 @@
   .navbar-nav  li a:hover {
     color: #1abc9c !important;
   }
+	    
+  .file-upload{
+	display: inline- flex;
+	align-items: center;
+	font-size: 15px;
+   }
+	    
+   .file-upload__in put{
+    	display: none;
+    }
+	    
+    .file-upload__button{
+	-webkit-appearance: none;
+	 background: #009879; 
+	 border: 2px solid #00745D;
+	 border- rdaius: 4px;
+	 outline: none;
+	 padding: 0.5em 0.8em;
+  	 margin-right: 15px;
+  	 color: #ffffff;
+  	 font-size: 1em;
+  	 font-family: "Quicksand", sans-serif;
+  	 font-weight: bold;
+  	 cursor: pointer;
+     }
 
+     .file-upload__button:active {
+  	 background: #00745d;
+     }
+
+     .file-upload__label {
+  	 max-width: 250px;
+  	 font-size: 0.95em;
+  	 text-overflow: ellipsis;
+  	 overflow: hidden;
+  	 white-space: nowrap;
+  	 font-family: "Quicksand", sans-serif;
+     }
+    
+	    
   a{
     display:inline;
     width: 100%;
@@ -141,6 +180,8 @@
     
     display: inline;
   }
+	    
+  
     </style>
 <body>
     <!-- Navbar -->
@@ -175,6 +216,16 @@
             <input id="password" type="password" placeholder="Password"><br/><br/>
             <input id="number" type="tel" placeholder="Phone Number"><br/><br/>
             <input id="address" type="text" placeholder="Address"><br/><br/>
+	     
+		<div class= "file-upload"><!--File submission button for users' files-->
+			<input class="file-upload_input" type= "file" name= "myFile[]" id= "myFile" multiple>
+			<button class= "file-upload__button" type= "button">Choose File(s)</button>
+			<span class= "file-upload__label"> </span>
+			
+		</div>
+		
+		
+		
             <button id="registerbutton" onclick="runSignupUser();">Register</button><br/>
 		</div>
       </div>
@@ -185,6 +236,36 @@
       <p>EasyDrop by RMD Technologies</p> 
     </footer>
 
+	<!-- Javascript for the collection of files-->
+Array.prototype.forEach.call(
+  document.querySelectorAll(".file-upload__button"),
+  function(button) {
+    const hiddenInput = button.parentElement.querySelector(
+      ".file-upload__input"
+    );
+    const label = button.parentElement.querySelector(".file-upload__label");
+    const defaultLabelText = "No file(s) selected";
+
+    // Set default text for label
+    label.textContent = defaultLabelText;
+    label.title = defaultLabelText;
+
+    button.addEventListener("click", function() {
+      hiddenInput.click();
+    });
+
+    hiddenInput.addEventListener("change", function() {
+      const filenameList = Array.prototype.map.call(hiddenInput.files, function(
+        file
+      ) {
+        return file.name;
+      });
+
+      label.textContent = filenameList.join(", ") || defaultLabelText;
+      label.title = label.textContent;
+    });
+  }
+);
 
       <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-app.js"></script>
