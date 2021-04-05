@@ -3,20 +3,38 @@ const db= firebase.firestore();
     function renderTable(doc){
         let tbody=document.getElementById('requestsRender');
         let row=document.createElement('tr');
-        let tripid=document.createElement('td');
+        let blank=document.createElement('td');
+        let tripid=document.createElement('a');
         tripid.setAttribute("id", "tripidD");
-        // let email=document.createElement('td');
+        tripid.setAttribute("href", "#");
+        tripid.setAttribute("style", "color: black");
+        tripid.setAttribute("target", "_parent");
+
         let seats=document.createElement('td');
-        seats.setAttribute("id", "seatsD");
+        seats.setAttribute("class", "seatClass");
+        let seatList = document.getElementsByClassName("seatClass");         
+        for (var i = 0; i < seatList.length; i++){
+            seatList[i].setAttribute("id", "seatsD" + (i + 1));
+        } 
 
         let price=document.createElement('td');
         price.setAttribute("id", "priceD");
+        price.setAttribute("class", "priceClass");
+        let priceList = document.getElementsByClassName("priceClass");         
+        for (var i = 0; i < priceList.length; i++){
+            priceList[i].setAttribute("id", "priceD" + (i + 1));
+        } 
+
 
         let time=document.createElement('td');
         time.setAttribute("id", "timeD");
+        time.setAttribute("class", "timeClass");
 
         let date=document.createElement('td');
         date.setAttribute("id", "dateD");
+
+        let start=document.createElement('td');
+        start.setAttribute("id", "dateD");
 
         let destination=document.createElement('td');
         destination.setAttribute("id", "destinationD");
@@ -24,10 +42,13 @@ const db= firebase.firestore();
         let edit=document.createElement('input');
         edit.setAttribute("type", "button");
         edit.setAttribute("value", "Edit");
-        edit.setAttribute("id", "driverEditBtn");
-        edit.setAttribute("class", "decisions");
+        edit.setAttribute("class", "editClass");
         edit.setAttribute("onclick", "editRow(this)");
-
+        let editList = document.getElementsByClassName("editClass");         
+        for (var i = 0; i < editList.length; i++){
+            editList[i].setAttribute("id", "driverEditBtn" + (i + 1));
+        }           
+        
         let delete1=document.createElement('input');
         delete1.setAttribute("type", "button");
         delete1.setAttribute("value", "Delete");
@@ -37,27 +58,34 @@ const db= firebase.firestore();
         let save=document.createElement('input');
         save.setAttribute("type", "button");
         save.setAttribute("value", "Save");
-        save.setAttribute("class", "decisions");
+        save.setAttribute("class", "saveClass");
         save.setAttribute("onclick", "saveRow(this)");
+        let saveList = document.getElementsByClassName("saveClass");         
+        for (var i = 0; i < saveList.length; i++){
+            saveList[i].setAttribute("id", "driverSaveBtn" + (i + 1));
+        } 
+        
         
 // ==========================================================//
         row.setAttribute("id", doc.id);
+        blank.innerHTML = "";
         tripid.innerHTML = doc.id;
         seats.innerHTML = doc.data().AvailableSeats;
         price.innerHTML = doc.data().Price;
         // email.innerHTML = doc.data().Email;
-        time.innerHTML = doc.data().Date;
-        date.innerHTML = doc.data().StartAddress + ', ' + doc.data().StartTown;
+        date.innerHTML = doc.data().Date;
+        start.innerHTML = doc.data().StartAddress + ', ' + doc.data().StartTown;
         destination.innerHTML = doc.data().StopAddress + ', ' + doc.data().StopTown;
         edit.innerHTML = doc.data().Edit;//THIS IS TO BE A BUTTON
         delete1.innerHTML = doc.data().Delete;//THIS IS TO BE A BUTTON
 // ==========================================================//
-        row.appendChild(tripid);
+        row.appendChild(blank);
+        blank.appendChild(tripid);
         row.appendChild(seats);
         row.appendChild(price);
-        row.appendChild(time);
-        // row.appendChild(email);
         row.appendChild(date);
+        // row.appendChild(email);
+        row.appendChild(start);
         row.appendChild(destination);
         row.appendChild(edit);
         row.appendChild(delete1);
@@ -65,8 +93,6 @@ const db= firebase.firestore();
         tbody.appendChild(row);
 // ==========================================================//    
     }
-
-    
 
     //===============Code edited from www.w3schools.com - No Copyright============ 
     function deleteRow(row) { 
@@ -83,34 +109,34 @@ const db= firebase.firestore();
   
     function editRow(row) { //Code inspired from http://www.talkerscode.com/webtricks/add-edit-and-delete-rows-from-table-dynamically-using-javascript.php
         var i = row.parentNode.rowIndex;
-        //alert("Row index is: " + i);
-        var test=document.getElementById("driverEditBtn");
-        //let tripid=document.getElementById("tripidD");
-        // let fname=document.getElementById("fnameD");
-        // let lname=document.getElementById("lnameD");
-        let seats=document.getElementById("seatsD");
-        let price=document.getElementById("priceD");
+            alert("Row index is: " + i);
+            document.getElementById("driverEditBtn"+i).style.display="none";
+            document.getElementById("driverSaveBtn"+i).style.display="block";
+            let seats=document.getElementById("seatsD"+i);
+            let price=document.getElementById("priceD"+i);
+            //let date=document.getElementById("tripidD");
+            // let start=document.getElementById("fnameD");
+            // let destination=document.getElementById("lnameD");
+            
 
-        
-        //var tripiddata= tripid.innerText;
-        // var fnamedata=fname.innerHTML;
-        // var lnamedata=lname.innerHTML;
-        var pricedata=price.innerHTML;
-        var seatsdata=seats.innerHTML;
- 
-        //================================= DISPLAYS A INPUT BOX =================================
-        //tripid.innerHTML="<input type='text' id='tripidEditBtn"+i+"' value='"+tripiddata+"' disabled='disabled'>";
-        // fname.innerHTML="<input type='text' id='fnameEditBtn"+i+"' value='"+fnamedata+"'>";
-        // lname.innerHTML="<input type='text' id='lnameEditBtn"+i+"' value='"+lnamedata+"'>";
-        price.innerHTML="<input type='text' id='priceEditBtn"+i+"' value='"+pricedata+"'>";
-        seats.innerHTML="<input type='text' id='seatsEditBtn"+i+"' value='"+seatsdata+"'>";
-        
+            //var datedata= date.innerText;
+            // var startdata=start.innerHTML;
+            // var destinationdata=destination.innerHTML;
+            var pricedata = price.innerHTML;
+            var seatsdata = seats.innerHTML;
+    
+            //================================= DISPLAYS A INPUT BOX =================================
+            // date.innerHTML="<input type='text' id='dateEditBtn"+i+"' value='"+datedata+"'>";
+            // start.innerHTML="<input type='text' id='startEditBtn"+i+"' value='"+startdata+"'>";
+            // destination.innerHTML="<input type='text' id='destinationEditBtn"+i+"' value='"+destinationdata+"'>";
+            price.innerHTML="<input type='text' id='priceEditBtn"+i+"' value='"+pricedata+"'>";
+            seats.innerHTML="<input type='text' id='seatsEditBtn"+i+"' value='"+seatsdata+"'>"; 
+       
     } 
 
     function saveRow(row){
         //================================= SAVE DATE FROM THE INPUT BOX TO SCREEN=================================
         var i = row.parentNode.rowIndex;
-        console.log("hello");
         var priceEdit = document.getElementById("priceEditBtn"+i);
         var seatsEdit = document.getElementById("seatsEditBtn"+i);
         var priceValue;
@@ -123,24 +149,18 @@ const db= firebase.firestore();
         if(seatsEdit){
             seatsValue = seatsEdit.value;
         }
-        //var tripidValue= document.getElementById("tripidEditBtn"+i).value; 
-        // var fnameValue=document.getElementById("fnameEditBtn"+i).value;
-        // var lnameValue=document.getElementById("lnameEditBtn"+i).value;
-        //var priceValue=document.getElementById("priceEditBtn"+i).value;
-        //var seatsValue=document.getElementById("seatsEditBtn"+i).value;
-        //document.getElementById("tripidD").innerHTML=tripidValue;
-        // document.getElementById("fnameD").innerHTML=fnameValue;
-        // document.getElementById("lnameD").innerHTML=lnameValue;
-        document.getElementById("priceD").innerHTML=priceValue;
-        document.getElementById("seatsD").innerHTML=seatsValue;
+        var priceValue=document.getElementById("priceEditBtn"+i).value;
+        var seatsValue=document.getElementById("seatsEditBtn"+i).value;
+        
+        document.getElementById("priceD"+i).innerHTML=priceValue;
+        document.getElementById("seatsD"+i).innerHTML=seatsValue;
         
         document.addEventListener('click', (e) =>{
             e.preventDefault();
-            console.log("hello");
             let id=e.target.parentElement.getAttribute('id');
+            
             console.log(id);
             db.collection('Trips').doc(id).get().then((snapshot) => { //
-                    console.log(snapshot.data().Price);
                     currentPrice = snapshot.data().Price;
                     currentSeats = snapshot.data().AvailableSeats;
             })
@@ -150,11 +170,9 @@ const db= firebase.firestore();
             if(seatsValue == null){
                 seatsValue = currentSeats;
             }
-            console.log(currentPrice);
-            console.log(currentSeats);
-            const temp1={
-                // FirstName: fnameValue,
-                // LastName: lnameValue,  
+            console.log(priceValue);
+            console.log(seatsValue);
+            const temp1={ 
                 AvailableSeats: seatsValue, 
                 Price: priceValue
             };
@@ -400,7 +418,6 @@ const db= firebase.firestore();
                     drivercellbox = result.data().number;
                     */
                 })
-                console.log(user.FirstName);
             })
             db.collection("Trips").where("Email", "==", email).get().then((snapshot) =>{
                 snapshot.docs.forEach(doc => {
@@ -429,8 +446,7 @@ const db= firebase.firestore();
         }
     });
 
-
-    // ============= S T A R    R A T I N G S     F U N C T I O N S
+//=================================== S T A R    R A T I N G S     F U N C T I O N S =======================
 
 const stars= [false, false, false, false, false];
 const ease= [false, false, false, false, false];//Ease of carpool booking
@@ -637,41 +653,110 @@ function mark5(key, star){ // this is to mark the star ONLY!
 
 function renderReviews(doc){
     // ===================Build container=====================
-    let divElement1=document.getElementById('testimonials');
-    let reviews=document.getElementById('reviews2'); 
+    let tbody=document.getElementById('reviews2'); 
     let row=document.createElement('tr'); 
-    let breakline=document.createElement('hr'); //row
-
-    // let imgElement=document.createElement('img');
-    // imgElement.setAttribute("src", "images/homepage.png");
-    // imgElement.setAttribute("alt", "Avatar");
-    // imgElement.setAttribute("style", "width:90px");
-
+    let br1=document.createElement('br');
+    let br2=document.createElement('br');
+    let br3=document.createElement('br');
+    let br4=document.createElement('br');
+    let br5=document.createElement('br');
+    let imgElement=document.createElement('img');
+    imgElement.setAttribute("src", "images/homepage.png");
+    imgElement.setAttribute("alt", "Avatar");
+    imgElement.setAttribute("style", "width: 105px; height: 105px");
+    
     let paragraph=document.createElement('p');
     let icon=document.createElement('i');
+    let icon2=document.createElement('i');
+    let icon3=document.createElement('i');
+    let icon4=document.createElement('i');
+    let icon5=document.createElement('i');
+    let icon6=document.createElement('i');
     // ===================Build container=====================
 // ==========================================================//
     paragraph.innerHTML ='User ' +doc.data().Email+' review about '+ doc.data().TripId+ ':';
     row.appendChild(paragraph); 
-    for(let index=0; index < doc.data().Punctuality.length; index++){
-        if(doc.data().Punctuality[index]==true){
-            icon.innerHTML+=`<i class="fas fa-star" style="color:orange"></i>`
+    row.appendChild(imgElement);
+    row.append("Driver's Knowledge: ");
+    for(let index=0; index < doc.data().DriverKnowledge.length; index++){
+        if(doc.data().DriverKnowledge[index]==true){
+            icon.innerHTML+=`<i class="fas fa-star" style="color:orange"></i>`;
             row.appendChild(icon);
         }
-        if(doc.data().Punctuality[index]==false){
-            icon.innerHTML+=`<i class="fas fa-star" style="color:initial"></i>`
+        if(doc.data().DriverKnowledge[index]==false){
+            icon.innerHTML+=`<i class="fas fa-star" style="color:initial"></i>`;
             row.appendChild(icon);
         }
     }
+    row.appendChild(br1);
+    row.append("Ease of Booking: ");
+    for(let index=0; index < doc.data().EaseofBooking.length; index++){ 
+        if(doc.data().EaseofBooking[index]==true){
+            icon2.innerHTML+=`<i class="fas fa-star" style="color:orange"></i>`;
+            row.appendChild(icon2);
+        }
+        if(doc.data().EaseofBooking[index]==false){
+            icon2.innerHTML+=`<i class="fas fa-star" style="color:initial"></i>`;
+            row.appendChild(icon2);
+        }
+    }
+    row.appendChild(br2);
+    row.append("Feeling of safety: ");
+    for(let index=0; index < doc.data().FeelingofSafety.length; index++){
+        if(doc.data().FeelingofSafety[index]==true){
+            icon3.innerHTML+=`<i class="fas fa-star" style="color:orange"></i>`;
+            row.appendChild(icon3);
+        }
+        if(doc.data().FeelingofSafety[index]==false){
+            icon3.innerHTML+=`<i class="fas fa-star" style="color:initial"></i>`;
+            row.appendChild(icon3);
+        }
+    }
+    row.appendChild(br3);
+    row.append("Ride of Comfort: ");
+    for(let index=0; index < doc.data().RideComfort.length; index++){
+        if(doc.data().RideComfort[index]==true){
+            icon4.innerHTML+=`<i class="fas fa-star" style="color:orange"></i>`;
+            row.appendChild(icon4);
+        }
+        if(doc.data().RideComfort[index]==false){
+            icon4.innerHTML+=`<i class="fas fa-star" style="color:initial"></i>`;
+            row.appendChild(icon4);
+        }
+    }
+    row.appendChild(br4);
+    row.append("Punctuality: ");
+    for(let index=0; index < doc.data().Punctuality.length; index++){
+        if(doc.data().Punctuality[index]==true){
+            icon5.innerHTML+=`<i class="fas fa-star" style="color:orange"></i>`;
+            row.appendChild(icon5);
+        }
+        if(doc.data().Punctuality[index]==false){
+            icon5.innerHTML+=`<i class="fas fa-star" style="color:initial"></i>`;
+            row.appendChild(icon5);
+        }
+    }
+    row.appendChild(br5);
+    row.append("Overall Experience: ");
+    for(let index=0; index < doc.data().OverallExperience.length; index++){
+        if(doc.data().OverallExperience[index]==true){
+            icon6.innerHTML+=`<i class="fas fa-star" style="color:orange"></i>`;
+            row.appendChild(icon6);
+        }
+        if(doc.data().OverallExperience[index]==false){
+            icon6.innerHTML+=`<i class="fas fa-star" style="color:initial"></i>`;
+            row.appendChild(icon6);
+        }
+    }
 // ==========================================================//
-    divElement1.appendChild(row);
+
+    tbody.appendChild(row);
 // ==========================================================//   
 }
 
 db.collection("Reviews").get().then((snapshot) =>{
     snapshot.docs.forEach(doc => {
         if(doc.data().Punctuality[0]==true){
-            console.log(doc.data().Punctuality[0]);
             renderReviews(doc);// when a use logs in, all his/her sharedtrips appears here
         }
     });
