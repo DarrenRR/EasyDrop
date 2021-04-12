@@ -11,19 +11,37 @@ var username;
 var email;
 var user;
 
+
+
 //  Gets the current signed in user
 firebase.auth().onAuthStateChanged((user) => {
+    var info = document.getElementsByClassName('bg-2');
+    var accessMessage = document.getElementById('accessMessage');
     if (user){
         //  Gets the user's information from firestore
         email = user.email;
         console.log(email);
         const currUser = db.collection("users").where("email", "==", email).get().then((snapshot) => {
             snapshot.docs.forEach(result => {
-                username = result.data().username;
-                driverfname = result.data().firstName;
-                driverlname = result.data().lastName;
-                driveremailbox = result.data().email;
-                drivercellbox = result.data().number;
+                if(result.data().isVerified === false){
+                    info[0].style.display = 'block';
+                    if(result.data().submittedDDocuments === false){
+                        accessMessage.innerHTML = "Please await verification before you can access this page.";
+
+                    }
+                    else{
+                        accessMessage.innerHTML = "Please verify your account before you can access this page.";
+                    }
+                }
+                else{
+                    var info = document.getElementsByClassName('bg-1');
+                    info[0].style.display = 'block';
+                    username = result.data().username;
+                    driverfname = result.data().firstName;
+                    driverlname = result.data().lastName;
+                    driveremailbox = result.data().email;
+                    drivercellbox = result.data().number;
+                }
             })
         })
         /*
@@ -31,6 +49,9 @@ firebase.auth().onAuthStateChanged((user) => {
             
         });
         */
+    }
+    else{
+        window.location="login.html";
     }
 });
 
@@ -64,6 +85,92 @@ function UpdateTrip(val, type){//this function updates the trip
 }
 
 
+function getDurationandDistance(start, stop){
+    var request = {
+        origin : start,
+        destination : stop,
+        travelMode: google.maps.TravelMode.DRIVING
+    };
+
+    var duration = 0;
+    var distance = 0;
+
+    var details = {distance : null, duration: null};
+
+    var directionsService = new google.maps.DirectionsService();
+    setTimeout(function(){
+    directionsService.route(request, function(response, status){
+        if(status == google.maps.DirectionsStatus.OK){
+            console.log("yes");
+            var point = response.routes[ 0 ].legs[ 0 ];
+            duration = (point.duration.value/60)*1.75;
+            distance = point.distance.text;
+            details.distance = distance;
+            details.duration = duration;
+            //details.push({duration: duration, distance: distance});
+        }
+    });
+    }, 1000)
+    return details;
+}
+
+async function addTrip(){
+    //Splits the full address into address and town to help searching
+    var fullStartAddress = document.getElementById("start_location").value.split(',');
+    var fullStopAddress = document.getElementById("destination_input").value.split(',');
+    console.log(fullStartAddress[0]);
+    var startAddress = fullStartAddress[0];
+    var startTown = fullStartAddress[1];
+    var stopAddress = fullStopAddress[0];
+    var stopTown = fullStopAddress[1];
+
+    var time = document.getElementById("timepicker").value;
+
+    var id = Date.now().toString();                           
+    //Assigns latitude and longitude for start and stop locations
+    var startLatitude = document.getElementById("start_latitude").value;
+    var startLongitude = document.getElementById("start_longitude").value;
+    var stopLatitude = document.getElementById("stop_latitude").value;
+    var stopLongitude = document.getElementById("stop_longitude").value;
+
+    var start = new google.maps.LatLng(parseFloat(startLatitude), parseFloat(startLongitude));
+    var stop = new google.maps.LatLng(parseFloat(stopLatitude), parseFloat(stopLongitude));
+
+    
+    var details = getDurationandDistance(start, stop);
+    setTimeout(function(){
+        console.log(details.duration);
+        console.log(details.distance);
+        
+        db.collection("Trips").doc(id).set({
+            Username : username,
+            FirstName: driverfname,
+            LastName: driverlname, 
+            Email: driveremailbox, 
+            Cell: drivercellbox, 
+            Date: tempDdate,
+            AvailableSeats: tempDseats, 
+            Price: tempDprice, 
+            NumberPlate: tempDlicense,
+            AdditionalNotes: tempDdescription,
+            StartAddress : startAddress,
+            StartTown : startTown,
+            StartLat : startLatitude,
+            StartLng : startLongitude,
+            StopAddress : stopAddress,
+            StopTown : stopTown,
+            StopLat : stopLatitude,
+            StopLng : stopLongitude,
+            StartTime : time,
+            Distance: details.distance,
+            Duration: details.duration,
+            isFull: false,
+        });
+    }, 3000);
+    alert("Your trip was successfully created!");
+}
+
+  /* 
             // ------------ ADD DATA TO DB (works with forms only!) -----------------------
 driverAddBtn.addEventListener('click', (e) =>{
     e.preventDefault();
@@ -76,12 +183,23 @@ driverAddBtn.addEventListener('click', (e) =>{
     var stopAddress = fullStopAddress[0];
     var stopTown = fullStopAddress[1];
 
+    var time = document.getElementById("timepicker").value;
+
     var id = Date.now().toString();                           
     //Assigns latitude and longitude for start and stop locations
     var startLatitude = document.getElementById("start_latitude").value;
     var startLongitude = document.getElementById("start_longitude").value;
     var stopLatitude = document.getElementById("stop_latitude").value;
     var stopLongitude = document.getElementById("stop_longitude").value;
+
+    var start = new google.maps.LatLng(parseFloat(startLatitude), parseFloat(startLongitude));
+    var stop = new google.maps.LatLng(parseFloat(stopLatitude), parseFloat(stopLongitude));
+
+    var details = getDurationandDistance(start, stop);
+    console.log(details);
+
+
+   
     db.collection("Trips").doc(id).set({
         Username : username,
         FirstName: driverfname,
@@ -101,9 +219,14 @@ driverAddBtn.addEventListener('click', (e) =>{
         StopTown : stopTown,
         StopLat : stopLatitude,
         StopLng : stopLongitude,
+        StartTime : time,
+        Distance: distance,
+        Duration: duration*1.75,
     });
-    alert("Your trip was successfully created!");
+    
+    //alert("Your trip was successfully created!");
 }); //adds data using the button
+*/
             
             // ------------ EDIT DATA SPECIFIED DB (works with forms only!)-----------------------
 driverEditBtn.addEventListener('click', (e) =>{
@@ -129,11 +252,3 @@ driverDelBtn.addEventListener('click', (e) =>{
     e.preventDefault();
     db.collection("Trips").doc(tempDemail).delete();
 }); //deletes data using the button
-
-
-function getUser(){
-    firebase.auth().onAuthStateChanged(
-      function(user){
-        callback(user);
-      });
-  }

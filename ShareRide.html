@@ -9,6 +9,8 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+
          <!-- Google Maps API-->
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyAm5YUmQecbnAsYWwKqox8uVucKumvRbxs"></script>
 
@@ -91,14 +93,18 @@
                 </div>
                 </div>
             </nav>
+            <div class="verify" style="display: none;">
+                <p>Your account isn't verified. Please<a id="verifytext" href="verify.html">verify</a>your account in order to gain full access of EasyDrop.</p>
+              </div>
             <!-- First Container -->
-                <div class="container-fluid bg-1 text-center">
+                <div class="container-fluid bg-1 text-center"  style="display: none;">
                     <h1 id = "statement" class="margin">Share your Carpool</h1>
                     <form>
 
                     <div id="offerDrop">
                         <div>
                             <input type="text" type="datebox" placeholder="DD/MM/YYYY" oninput="UpdateTrip(this.value, 'dateD')" required><br>
+                            <input type="text" name="time" placeholder="Start Time" id="timepicker"><br>
                             <!--<input type="time"  placeholder="Time" oninput="UpdateTrip(this.value, 'timeD')" required><br>--> 
                             <input type="text" class="form-control" id="start_input" placeholder="Starting Address"><br>
                             <input type="text" class="form-control" id="destination_input" placeholder="Destination Address"><br>
@@ -117,7 +123,7 @@
                             <input type="hidden" id="stop_latitude" />
                             <input type="hidden" id="stop_longitude" />
                 
-                            <button class="waves-effect waves-light btn" id="driverAddBtn" >Share Trip</button>
+                            <button class="waves-effect waves-light btn" id="driverAddBtn" type="button" onclick="addTrip()">Share Trip</button>
                             <!-- <button class="waves-effect waves-light btn" id="driverEditBtn" >Update</button>
                             <button class="waves-effect waves-light btn" id="driverDelBtn" >Delete</button> -->
                             
@@ -126,6 +132,12 @@
                     </div>
                 </form>
             </div>
+
+            <div class="container-fluid bg-2 text-center"  style="display: none;">
+                <h3 class="margin">You do not have access to this feature.</h3>
+                <p id="accessMessage"></p>
+                
+              </div>
 
             <!-- Footer -->
         <footer class="container-fluid bg-4 text-center">
@@ -136,6 +148,7 @@
         <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-storage.js"></script>
 
         <!-- TODO: Add SDKs for Firebase products that you want to use
             https://firebase.google.com/docs/web/setup#available-libraries -->
@@ -152,7 +165,16 @@
         <script src="js/navbar.js"></script>
             <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+        $('#timepicker').timepicker({
+            dropdown: true,
+            scrollbar: true
+        });
+        });
+    </script>
     </body>
 </html>
 

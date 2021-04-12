@@ -9,11 +9,22 @@
   <link rel="stylesheet" href="css/styles.css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <!-- Google Maps API-->
-  <script defer src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyAm5YUmQecbnAsYWwKqox8uVucKumvRbxs"></script>
+  <script defer src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places,geometry&key=AIzaSyAm5YUmQecbnAsYWwKqox8uVucKumvRbxs"></script>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-storage.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+  <script src="js/initializefirebase.js"></script>
   <script type="text/javascript" src="js/search.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 
   <style>
 
@@ -50,6 +61,9 @@
             document.getElementById('start_latitude').value = near_place.geometry.location.lat();
             document.getElementById('start_longitude').value = near_place.geometry.location.lng();
         });
+
+        var date = document.getElementById("date").value;
+        document.getElementById("dateValue").value = date;
     });
 
     var destinationInput = 'destination_input';
@@ -71,6 +85,7 @@
             document.getElementById('stop_longitude').value = near_place.geometry.location.lng();
         });
     });
+
   </script>
 </head>
 <body>
@@ -97,10 +112,14 @@
     </div>
   </div>
 </nav>
+<div class="verify" style="display: none;">
+  <p>Your account isn't verified. Please<a id="verifytext" href="verify.html">verify</a>your account in order to gain full access of EasyDrop.</p>
+</div>
 
 <!-- First Container -->
-<div class="container-fluid bg-1 text-center">
-  <h1 id = "statement" class="margin">Find a Carpool</h1>
+<div class="container-fluid bg-1 text-center" style="display: none;">
+  <h1 id = "statement" class="margin">Find a Drop</h1>
+  <h4 id = "description" class="maargin">Find drops based on your locations or submit your request and we'll allocate you to one later on.</h4>
   <form class="form">
 
     <div class="form-group row">
@@ -121,12 +140,18 @@
 
     <input type="hidden" id="stop_latitude" />
     <input type="hidden" id="stop_longitude" />
+
+    <input type="hidden" id="dateValue" />
     
     <div class="form-group row">
       <label  for="date">Date:</label>
       <input type="text" class="form-control" id="date" placeholder="DD/MM/YYYY">
     </div>
 
+    <div class="form-group row">
+      <label  for="time">Time:</label>
+      <input type="text" class="form-control" name="time" placeholder="Time" id="timepicker"><br>
+    </div>
     <!--
     <div class="form-group">
       <label for="time">Time:</label>
@@ -139,9 +164,10 @@
     -->
     
   </form>
-  <button type="button" class="btn btn-primary" onclick="getTrips()">Search</button><br>
+  <button type="button" id="searchButton" class="btn btn-primary" onclick="getTrips()">Search</button>
+  <button type="button" id="requestButton" class="btn btn-primary" onclick="submitRequest()">Submit Request</button>
   
-  <br><h5 class="container-fluid text-left" id = "results"></h5>
+  <h5 class="container-fluid text-left" id = "results"></h5>
   <div id = "searchResults" style="display:none">
   </div>
   <!--
@@ -182,30 +208,37 @@
   <div id = "map"></div>
 </div>
 
-
-
+<div class="container-fluid bg-2 text-center"  style="display: none;">
+  <h3 class="margin">You do not have access to this feature.</h3>
+  <p id="accessMessage"></p>
+  
+</div>
 
 <!-- Footer -->
 <footer class="container-fluid bg-4 text-center">
   <p>EasyDrop by RMD Technologies</p> 
 </footer>
 
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
 
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+
  
  <!--Main Firebase scripts-->
- <script src="js/initializefirebase.js"></script>
+ 
  <script src="js/authentication.js"></script>
  <script src="js/user.js"></script>
  <script src="js/reserveTrips.js"></script>
  <script src="js/login.js"></script>
  <script src="js/navbar.js"></script>
+
+ <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+ <script type="text/javascript">
+  $(document).ready(function(){
+  $('#timepicker').timepicker({
+      dropdown: true,
+      scrollbar: true
+  });
+  });
+</script>
 
 </body>
 </html>

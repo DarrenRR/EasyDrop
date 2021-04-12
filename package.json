@@ -1,0 +1,17 @@
+{
+      
+    "name": "scheduler",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",  
+    "scripts": {
+        "start": "node allocatePassengers.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "node-cron": "^3.0.0",
+        "node-schedule": "^2.0.0"
+    }
+}

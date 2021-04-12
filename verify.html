@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Theme Made By www.w3schools.com - No Copyright -->
+  <title>EasyDrop</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="index.html">EasyDrop</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li class = "regular-options" style="display: none;"><a href="Search.html">Find a Drop</a></li>
+        <li class = "regular-options" style="display: none;"><a href="ShareRide.html">Offer a Drop </a></li>
+        <li class = "logged-out"  style="display: none;"><a href="login.html">Log In</a></li>
+        <li class = "logged-out"  style="display: none;"><a href="signup.html">Sign Up</a></li>
+        <li class = "logged-in"  style="display: none;"><a href="ManageTripsandPassengers.html">Dashboard</a></li>
+        <li class = "logged-in"  style="display: none;"><a href="login.html" onclick="signOut()">Log Out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="verify" style="display: none;">
+    <p>Your account isn't verified. Please<a href="verify.html">verify</a>your account in order to gain full access of EasyDrop.</p>
+  </div>
+<!-- First Container -->
+<div class="container-fluid bg-1 text-center">
+    <h1 id = "statement" class="margin">Verify your account</h1>
+    <div class="container py-5">
+
+    
+        <div class="row py-4">
+            <div class="col-lg-6 mx-auto">
+                <p id="verification">Step 1: Upload a clear picture of yourself from your shoulder upward.</p>
+                <p id="verification">This picture will be used as your profile picture.</p>
+                <img src="images/profile.png" id="profilePic" class="img-responsive margin" style="display:inline;" alt="Image">
+                <input type="file"  id = "select_image" style="display:inline;" onchange="chooseFile(event)" />
+            </div>
+
+            <div class="col-lg-6 mx-auto">
+                <p id="verification">Step 2: Upload a clear picture of a form of identification.</p>
+                <p id="verification">Your form of identification should not be expired.</p>
+                <img src="images/identification.png" id="idPic" class="img-responsive margin" style="display:inline;" alt="Image">
+                <input type="file" id = "select_image2" style="display:inline;" onchange="chooseFile2(event)" />
+            </div>
+
+        
+            
+            
+    
+         <button onclick="uploadDocuments()">Upload</button>
+                
+    
+         </div>
+
+    </div>
+    
+</div>
+
+
+<!-- Footer -->
+<footer class="container-fluid bg-4 text-center">
+  <p>EasyDrop by RMD Technologies</p> 
+</footer>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-storage.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+ 
+ <!--Main Firebase scripts-->
+ <script src="js/initializefirebase.js"></script>
+ 
+ <!--JS scripts-->
+ <script src="js/verify.js"></script>
+ <script src="js/authentication.js"></script>
+ <script src="js/user.js"></script>
+ <script src="js/login.js"></script>
+ <script src="js/navbar.js"></script>
+
+</body>
+</html>
+

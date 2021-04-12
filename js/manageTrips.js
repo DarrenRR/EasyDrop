@@ -1,5 +1,429 @@
 const db= firebase.firestore(); 
 
+
+async function getPassengerList(thisID){
+    var passengers = db.collection("Bookings").where("TripId", "==", thisID).where("Accepted", "==", true).get();
+    var resolved;
+    passengers.catch(function(error){
+        console.log(error);
+        resolved = false;
+    });
+    passengers = await passengers;
+    if(resolved == false)
+        return null;
+    return passengers;
+  }
+  
+  async function getDriver(tripID){
+    var driver = db.collection('Trips').doc(tripID).get();
+    var resolved;
+    driver.catch(function(error){
+        console.log(error);
+        resolved = false;
+    });
+    driver = await driver;
+    if(resolved == false)
+        return null;
+    return driver;
+  }
+
+async function getURL(driver, waypoints){
+    var src = "&origin=" + driver.data().StartLat + "," + driver.data().StartLng;
+    var dest = "&destination=" + driver.data().StopLat + "," + driver.data().StopLng;
+
+    var waypointsString = "&waypoints=";
+
+    waypoints.forEach(function (waypoint) {
+        if(waypoint.point === "start"){
+            waypointsString += waypoint.start.latitude + "," + waypoint.start.longitude;
+        }
+        else if(waypoint.point === "stop"){
+            waypointsString += waypoint.stop.latitude + "," + waypoint.stop.longitude;
+            /*
+            
+            if(waypoints[waypoint.passengerNum].added == true){
+                
+            }
+            else{
+
+            }
+            */
+
+        }
+        else if(waypoint.point === "center"){
+            waypointsString += waypoint.center;
+        }
+        waypointsString += "%7C";
+    });
+
+    var link = "https://www.google.com/maps/dir/?api=1&travelmode=driving" + src + dest + waypointsString;
+    console.log(link);
+    return link;
+    
+}
+
+
+async function getLocations(tripID){
+    //var thisID = "1614915186664";
+    console.log(tripID);
+    var passengers = await getPassengerList(tripID);
+    var driver = await getDriver(tripID);
+    var passengersStart = [];
+    var passengersStop = [];
+    var passengerCount = 0;
+    var waypoints = [];
+    passengers.forEach(function(passenger){
+        passengerCount += 1;
+        passengersStart.push({point: "start", start: passenger.data().StartPoint, passengerNum: passengerCount, added : false, distance : getDistance(passenger.data().StartPoint, driver.data())});
+        passengersStop.push({point: "stop", stop: passenger.data().StopPoint, passengerNum: passengerCount, added : false, distance : getDistance(passenger.data().StopPoint, driver.data())});
+    });
+
+    for(var i = 0; i < passengerCount; i++){
+        console.log(passengersStart[i]);
+        console.log(passengersStop[i]);
+        waypoints.push(passengersStart[i]);
+        waypoints.push(passengersStop[i]);
+    }
+    console.log(waypoints);
+    waypoints.sort((a, b) => a.distance - b.distance);
+    console.log(waypoints);
+
+    var src = "&origin=" + driver.data().StartLat + "," + driver.data().StartLng;
+    var dest = "&destination=" + driver.data().StopLat + "," + driver.data().StopLng;
+
+    var waypointsString = "&waypoints=";
+
+    waypoints.forEach(function (waypoint) {
+        if(waypoint.point === "start"){
+            waypointsString += waypoint.start.latitude + "," + waypoint.start.longitude;
+        }
+        else if(waypoint.point === "stop"){
+            waypointsString += waypoint.stop.latitude + "," + waypoint.stop.longitude;
+            /*
+            
+            if(waypoints[waypoint.passengerNum].added == true){
+                
+            }
+            else{
+
+            }
+            */
+
+        }
+        
+        
+        waypointsString += "%7C";
+    });
+
+    var link = "https://www.google.com/maps/dir/?api=1&travelmode=driving" + src + dest + waypointsString;
+    console.log(link);
+    return link;
+}
+
+async function openNavigation(tripID){
+    console.log("TripID =" + tripID);
+    console.log(typeof tripID);
+    var link = await getLocations(tripID);
+    window.open(link, '_blank');
+}
+
+function getStart(passengerNum, waypoints){
+    for(var waypoint in waypoints){
+        if(waypoint.passengerNum === passengerNum && waypoint.point === "start"){
+            return waypoint;
+        }
+    }
+}
+
+function getDistance(passengerPoint, driver){
+    var passengerPosition = new google.maps.LatLng(passengerPoint.latitude, passengerPoint.longitude);
+    var driverPosition = new google.maps.LatLng(driver.StartLat, driver.StartLng);
+    var passengerDistance = google.maps.geometry.spherical.computeDistanceBetween (driverPosition, passengerPosition);
+    return passengerDistance;
+}
+
+async function mutualPickup(tripID){
+    var passengers = await getPassengerList(tripID);
+    var pickupPoint = await getPassengerCenter(passengers);
+    var waypoint;
+    if(pickupPoint === 0){
+        waypoint = [{point: "none"}];
+    }
+    else{
+        waypoint = [{point: "center", center: pickupPoint.lat() +","+pickupPoint.lng()}];
+    }
+    var driver = await getDriver(tripID);
+    var link = await getURL(driver, waypoint);
+    window.open(link, '_blank');
+}
+
+async function getAvailableSeats(tripID){
+    var currentPassengers;
+    var tripPassengers;
+    db.collection('Bookings').where("TripId" , "==", tripID).where("Accepted", "==", true).get().then(snapshot => {
+        currentPassengers = snapshot.size;
+        console.log(currentPassengers);
+    })
+    const trip = db.collection('Trips').doc(tripID);
+    const doc = await trip.get();
+    if (!doc.exists) {
+        console.log('No such document!');
+    } else {
+        console.log('Document data:', doc.data());
+        tripPassengers = doc.data().AvailableSeats;
+    }
+    return(tripPassengers - currentPassengers);
+}
+
+db.collection('Bookings').where("TripId" , "==", "1615904834637").get().then(snapshot => {
+    var size = snapshot.size;
+    console.log(size);
+})
+
+async function getBookings(date, time){
+    var bookings = db.collection("Bookings").where("TripId", "==", null).where("Date", "==", date).get();
+    var resolved;
+    bookings.catch(function(error){
+        console.log(error);
+        resolved = false;
+    });
+    bookings = await bookings;
+    if(resolved == false)
+        return null;
+    return bookings;
+}
+
+function compare( a, b ) {
+    if ( a.StartDistance < b.StartDistance ){
+      return -1;
+    }
+    if ( a.StartDistance > b.StartDistance ){
+      return 1;
+    }
+    return 0;
+  }
+  
+
+function getCombinations(bookings, seats) {
+    var combinations = [];
+
+    for(var i = 0 ; i < bookings.length ; i++) {
+        if(seats===1){
+            combinations.push([bookings[i]]);
+        }
+        else {
+            getCombinations(bookings.slice(i+1), seats-1).forEach(function(val) {
+                combinations.push([].concat(bookings[i], val));
+            });
+        }
+    }
+    return combinations;
+}
+
+function getDuration(waypoints, start, stop, distances, leastDistance){
+    var waypts = [];
+    waypoints.forEach(function(waypoint){
+        waypts.push({location: new google.maps.LatLng(waypoint.point.latitude, waypoint.point.longitude)})
+    });
+
+    var request = {
+        origin : start,
+        destination : stop,
+        waypoints : waypts,
+        optimizeWaypoints: true,
+        travelMode: google.maps.TravelMode.DRIVING
+    };
+
+    var duration;
+    var distance = 0;
+    var details = [];
+    console.log(waypts);
+    var directionsService = new google.maps.DirectionsService();
+    directionsService.route(request, function(response, status){
+        if(status == google.maps.DirectionsStatus.OK){
+            var point = response.routes[ 0 ];
+            var orders = response.routes[0].waypoint_order;
+            var total = 0;
+            for (let i = 0; i < point.legs.length; i++) {
+                total += point.legs[i].distance.value;
+            }
+            setTimeout(function() {
+                waypoints[waypts.length] = [(total/1000)];
+                distance = (total/1000);
+                if(distance < leastDistance){
+                    leastDistance = distance;
+                }
+                waypoints[waypts.length+1] = orders;
+                
+                distances.push({tripDistance: (total/1000), order: orders});
+
+                console.log(orders);
+                return;
+            }, 1000);
+        }
+    });
+}
+
+function getTripDistance(waypoint){
+    return waypoint;
+}
+
+async function allocatePassengers(tripID){
+    var numPassengers = await getAvailableSeats(tripID);
+    if(numPassengers < 1){
+        alert("Your trip is currently full. Please remove existing passengers if you would like to use this service.");
+        return;
+    }
+    console.log("Available seats : " + numPassengers);
+    var date, time, duration, start, stop;
+    const trip = db.collection('Trips').doc(tripID);
+    const doc = await trip.get();
+    if (!doc.exists) {
+        console.log('No such document!');
+    } else {
+        date = doc.data().Date;
+        time = doc.data().Time
+        duration = doc.data().Duration;
+        start = new google.maps.LatLng(parseFloat(doc.data().StartLat), parseFloat(doc.data().StartLng));
+        stop = new google.maps.LatLng(parseFloat(doc.data().StopLat), parseFloat(doc.data().StopLng));
+    }
+    var allBookings = await getBookings(date, time);
+    var bookings = [];
+    var existingPassengers = await getPassengerList(tripID);
+    var numExisting = 0;
+    existingPassengers.forEach(function(passenger){
+        numExisting++;
+    });
+    
+    allBookings.forEach(function(booking){
+        var tripStart = Date.parse('20 Aug 2000 '+time);
+        var bookingTime = Date.parse('20 Aug 2000 '+booking.data().Time);
+        var timeDifference = (bookingTime-tripStart)/60000;
+        if((timeDifference <= duration) && (timeDifference >= 0) && (booking.data().Username != doc.data().Username)){
+            onRoute(booking.data(), booking.id, doc.data(), bookings);
+        }
+    });
+   
+
+    setTimeout(function() {
+        if(bookings.length == 0){
+            alert("There are no passengers along your route currently.");
+        }
+        else if(bookings.length <= numPassengers){
+            bookings.forEach(function(booking){
+                const temp={
+                    Accepted : true,
+                    TripId : tripID
+                };
+                //db.collection("Bookings").doc(booking.bookingID).update(temp);
+            })
+            alert("Passengers have been successfully allocated to your trip!");
+        }
+        else{
+            bookings.sort( compare );
+            //console.log(bookings);
+            var combinations = getCombinations(bookings, numPassengers);
+            var waypoints = new Array(combinations.length);
+            for (var i = 0; i < waypoints.length; i++) {
+                var size = (numExisting+numPassengers)*2
+                waypoints[i] = new Array(size + 2);
+            }
+            var distances = [];
+            var leastDistance = 9999999;
+
+            setTimeout(function() {
+            for(var i = 0; i < combinations.length; i++){
+                var passengers = [];
+                var pending = [];
+                existingPassengers.forEach(function(passenger){
+                    passengers.push({type: "start", point: passenger.data().StartPoint, distance: passenger.data().StartDistance, bookingID: passenger.data().bookingID});
+                    passengers.push({type: "stop", point: passenger.data().StopPoint, distance: passenger.data().StopDistance, bookingID: passenger.data().bookingID});
+                });
+                for(var j = 0; j < combinations[i].length; j++){
+                    pending.push({type: "start", point: combinations[i][j].StartPoint, distance: combinations[i][j].StartDistance, bookingID: combinations[i][j].bookingID});
+                    pending.push({type: "stop", point: combinations[i][j].StopPoint, distance: combinations[i][j].StopDistance, bookingID: combinations[i][j].bookingID});
+                }
+                waypoints[i] = passengers.concat(pending);
+                waypoints[i].sort(function (a, b) {
+                    return a.distance - b.distance;
+                });
+
+                
+                // Avoid Google Maps over query limit
+                (function (i) {
+                    setTimeout(function () {
+                        getDuration(waypoints[i], start, stop, distances, leastDistance);
+                        var test = getTripDistance(distances[i]);
+                        wait = wait + 800;
+                    }, i * 800);
+                })(i);
+            }
+            var wait= combinations.length * 800;
+            setTimeout(function () {
+                waypoints.sort(function (a, b) {
+                    return a[size] - b[size];
+                });
+                waypoints[0].forEach(function(point){
+                    if(point.type === "start"){
+                        const temp={
+                            Accepted : true,
+                            TripId : tripID
+                        };
+                        db.collection("Bookings").doc(point.bookingID).update(temp);
+                    }
+                })
+                alert("Passengers have been successfully allocated to your trip!");
+            }, wait);
+            }, 1000);
+        }
+      }, 1000);
+}
+
+ function onRoute(booking, bookingID, trip, bookings){
+    var start = new google.maps.LatLng(parseFloat(trip.StartLat), parseFloat(trip.StartLng));
+    var stop = new google.maps.LatLng(parseFloat(trip.StopLat), parseFloat(trip.StopLng));
+    
+    var passengerStart = new google.maps.LatLng(parseFloat(booking.StartPoint.latitude), parseFloat(booking.StartPoint.longitude));
+    var passengerStop = new google.maps.LatLng(parseFloat(booking.StopPoint.latitude), parseFloat(booking.StopPoint.longitude));
+
+    var passengerBearing = google.maps.geometry.spherical.computeHeading(passengerStart,passengerStop);
+    var tripBearing = google.maps.geometry.spherical.computeHeading(start,stop);
+    
+
+
+    var request = {
+        origin : start,
+        destination : stop,
+        travelMode: google.maps.TravelMode.DRIVING
+    };
+
+    var directionsService = new google.maps.DirectionsService();
+    directionsService.route(request, function(response, status){
+        if(status == google.maps.DirectionsStatus.OK){
+
+            // Check if on route
+            var polyline = google.maps.geometry.encoding.decodePath(response.routes[0].overview_polyline);
+      
+            polyline = new google.maps.Polyline({path: polyline});
+
+            
+            if ((google.maps.geometry.poly.isLocationOnEdge(passengerStart, polyline, 0.02)) && (google.maps.geometry.poly.isLocationOnEdge(passengerStop, polyline, 0.02)) && (passengerBearing*tripBearing >0)){
+                  console.log("On route for " +  start + ", " + stop);
+                  booking.bookingID = bookingID;
+                  booking.StartDistance = getDistance(booking.StartPoint, trip);
+                  booking.StopDistance = getDistance(booking.StopPoint, trip);
+                  bookings.push(booking);
+            }
+            else{
+              console.log("Not on route for " + start + ", " + stop);
+            }
+        }
+    });
+    return;
+}
+
+
+
     function renderTable(doc){
         let tbody=document.getElementById('requestsRender');
         let row=document.createElement('tr');
@@ -39,6 +463,25 @@ const db= firebase.firestore();
         save.setAttribute("value", "Save");
         save.setAttribute("class", "decisions");
         save.setAttribute("onclick", "saveRow(this)");
+
+        let navigate=document.createElement('input');
+        navigate.setAttribute("type", "button");
+        navigate.setAttribute("value", "Shortest Route");
+        navigate.setAttribute("class", "decisions");
+        navigate.setAttribute('onclick', 'openNavigation("'+doc.id+'")');
+
+        let mutual=document.createElement('input');
+        mutual.setAttribute("type", "button");
+        mutual.setAttribute("value", "Mutual Pickup");
+        mutual.setAttribute("class", "decisions");
+        mutual.setAttribute('onclick', 'mutualPickup("'+doc.id+'")');
+
+        let allocate=document.createElement('input');
+        allocate.setAttribute("type", "button");
+        allocate.setAttribute("value", "Allocate Passengers");
+        allocate.setAttribute("class", "decisions");
+        allocate.setAttribute('onclick', 'allocatePassengers("'+doc.id+'")');
+        
         
 // ==========================================================//
         row.setAttribute("id", doc.id);
@@ -62,6 +505,9 @@ const db= firebase.firestore();
         row.appendChild(edit);
         row.appendChild(delete1);
         row.appendChild(save);
+        row.appendChild(navigate);
+        row.appendChild(mutual);
+        row.appendChild(allocate);
         tbody.appendChild(row);
 // ==========================================================//    
     }
@@ -398,7 +844,7 @@ const db= firebase.firestore();
                             renderpassengerTable(doc2); //when a user request to reserve a seat in logged in user carpool, it goes here
                         })
                     })
-                    db.collection("Reserved").where("TripId", "==", doc.id).get().then((snapshot3) => { //
+                    db.collection("Bookings").where("TripId", "==", doc.id).where("Accepted", "==", true).get().then((snapshot3) => { //
                         snapshot3.docs.forEach(doc3 => {
                             renderAcceptedPassengers(doc3);// when a logged in user accepts a request, it appears here
                         })
@@ -416,3 +862,7 @@ const db= firebase.firestore();
             
         }
     });
+
+
+    
+    

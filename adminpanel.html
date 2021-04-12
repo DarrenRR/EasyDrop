@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Theme Made By www.w3schools.com - No Copyright -->
+  <title>EasyDrop</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    .bg-1 { 
+    background-color: #39b485; /* Green */
+    color: #000000;
+    height: 100%;
+  }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand">EasyDrop</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li class = "logged-out"  style="display: none;"><a href="login.html">Log In</a></li>
+        <li class = "logged-out"  style="display: none;"><a href="signup.html">Sign Up</a></li>
+        <li class = "logged-in"  style="display: none;"><a href="login.html" onclick="signOut()">Log Out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- First Container -->
+<div class="container-fluid bg-1 text-center">
+  <h1 id = "statement" class="margin">Administrator Panel</h1>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+        User Submissions</a>
+      </h4>
+    </div>
+    <div id="collapse2" class="panel-collapse collapse">
+      <div class="panel-body">
+        <table class="table table-hover" id="mypassengerTable"> <!--table-hover-->
+            <thead class="thead-dark">
+            <tr style="background-color:grey">
+                <th scope="col">User Information</th>
+                <th scope="col">User Photo</th>
+                <th scope="col">User Identification</th>
+                <th scope="col">Decision</th>
+            </tr>
+            </thead>
+            <tbody id="userSubmissions">
+                
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- Footer -->
+<footer class="container-fluid bg-4 text-center">
+  <p>EasyDrop by RMD Technologies</p> 
+</footer>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-storage.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+ 
+ <!--Main Firebase scripts-->
+ <script src="js/initializefirebase.js"></script>
+ 
+ <!--JS scripts-->
+ <script src="js/authentication.js"></script>
+ <script src="js/admin.js"></script>
+ <script src="js/user.js"></script>
+ <script src="js/login.js"></script>
+ <script src="js/navbar.js"></script>
+
+</body>
+</html>
+

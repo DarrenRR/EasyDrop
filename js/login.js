@@ -20,7 +20,11 @@ async function signInUser(email, password){
     var password=document.getElementById("password").value;
     var success=await signInUser(email, password);
     if(success){
-      //alert("Login successful");
-      window.location.href="index.html";
+      if(email === "admin@easydrop.com"){
+        window.location.href="adminpanel.html";
+      }
+      else{
+        window.location.href="index.html";
+      }
     }
   }

@@ -49,7 +49,6 @@ body {
     width: 100%;
     padding-top: 30px;
     padding:0.35em 1.2em;
-    border:0.1em solid #FFFFFF;
     margin:0 0.3em 0.3em 0;
     border-radius:0.12em;
     box-sizing: border-box;
@@ -62,7 +61,7 @@ body {
   }
 
   .button1{
-    background-color: white;
+    background-color: #05386B;
     color: #39b485;
   }
 
@@ -100,6 +99,10 @@ body {
   input[type=text]:focus, input[type=password]:focus {
     background-color: #ddd;
     outline: none;
+  }
+
+  input[type=file]{
+    width: 60%;
   }
 
   hr {
@@ -190,3 +193,77 @@ body {
   .decisions-2{
     font-size: 9px;
   }
+
+  #description{
+    margin-bottom: 2em ;
+  }
+
+  #statement{
+    color: #EDF5E1;
+    font-size: 50px;
+    line-height: 0 ;
+    margin-top: 0em ;
+    margin-bottom: 1em ;
+    font-weight: 900;
+  }
+
+  #searchButton{
+    background-color:  #05386b;
+    width: 250px;
+  }
+
+  #requestButton{
+    background-color: #05386b;
+    width: 250px;
+  }
+
+  .verify{
+    text-align: center;
+    background-color: rgb(247, 247, 27);
+    color: #000000;
+    height: 3%;
+  }
+
+  .verify p{
+    line-height: 20px;
+  }
+
+  .verify a{
+    color: #000000;
+  }
+
+  #verification{
+    color: #ddd;
+    font-weight: bolder;
+  }
+
+  .verifybutton {
+    color: #FFF;
+    background: #44CC44;
+    padding: 10px 24px;
+    border:#FFF;
+    box-shadow: 0 4px 0 0 #2EA62E;
+  }
+  .verifybutton:hover {
+    background: #6FE76F;
+    box-shadow: 0 4px 0 0 #7ED37E;
+  }
+
+  .deny {
+    color: #FFF;
+    background: tomato;
+    padding: 10px 24px;
+    margin: 20px;
+    border:#FFF;
+    box-shadow: 0 4px 0 0 #CB4949;
+  }
+  .deny:hover {
+    background: rgb(255, 147, 128);
+    box-shadow: 0 4px 0 0 #EF8282;
+  }
+
+
+  #verifytext{
+    padding: 5px;
+  }
+
