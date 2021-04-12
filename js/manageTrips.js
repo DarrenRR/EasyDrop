@@ -114,14 +114,8 @@ const db= firebase.firestore();
             document.getElementById("driverSaveBtn"+i).style.display="block";
             let seats=document.getElementById("seatsD"+i);
             let price=document.getElementById("priceD"+i);
-            //let date=document.getElementById("tripidD");
-            // let start=document.getElementById("fnameD");
-            // let destination=document.getElementById("lnameD");
             
-
-            //var datedata= date.innerText;
-            // var startdata=start.innerHTML;
-            // var destinationdata=destination.innerHTML;
+            
             var pricedata = price.innerHTML;
             var seatsdata = seats.innerHTML;
     
@@ -181,6 +175,60 @@ const db= firebase.firestore();
         return;
     }
 
+    function sendAcceptanceEmail(row) {
+        var i = row.parentNode.rowIndex;
+        var table= document.getElementById("mypassengerTable"); 
+        var username= table.rows[i].cells[3].innerHTML;
+        var tripID= table.rows[i].cells[0].innerHTML;
+        db.collection("Bookings").where("Username", "==", username).limit(1).get().then((snapshot) =>{
+            snapshot.docs.forEach(doc => {
+                        console.log(email);
+                        console.log(doc.data().Email);
+                        console.log(doc.id);
+                        Email.send({
+                        Host: "smtp.gmail.com",
+                        Username:  "info3604project@gmail.com",
+                        Password: "rogfccilfbzzkmao", 
+                        To: doc.data().Email,
+                        From: email,
+                        Subject: "EasyDrop",
+                        Body: `This user: ${email} has accepted your request to join: <br> TripID: ${tripID}, please check your EasyDrop app.`
+                        }).then(
+                            message => alert("Mail sent successfully")
+                        );            
+            });
+                   
+        });        
+    }
+
+    function sendDeclineEmail(row) {
+        var i = row.parentNode.rowIndex;
+        var table= document.getElementById("mypassengerTable"); 
+        var username= table.rows[i].cells[3].innerHTML;
+        var tripID= table.rows[i].cells[0].innerHTML;
+        db.collection("Bookings").where("Username", "==", username).limit(1).get().then((snapshot) =>{
+            snapshot.docs.forEach(doc => {
+                        console.log(email);
+                        console.log(doc.data().Email);
+                        console.log(doc.id);
+                        Email.send({
+                        Host: "smtp.gmail.com",
+                        Username:  "info3604project@gmail.com",
+                        Password: "rogfccilfbzzkmao", 
+                        To: doc.data().Email,
+                        From: email,
+                        Subject: "EasyDrop",
+                        Body: `This user: ${email} has declined your request to join: <br> TripID: ${tripID}, please check your EasyDrop app.`
+                        }).then(
+                            message => alert("Mail sent successfully")
+                        );            
+            });
+                   
+        });        
+    }
+
+
+
     function renderpassengerTable(doc){
         let tbody=document.getElementById('passengerRequests');
         let row=document.createElement('tr');
@@ -201,19 +249,19 @@ const db= firebase.firestore();
 
         let stoploc=document.createElement('td');
         stoploc.setAttribute("id", "passengerstoploc");
-
+        
         let accept=document.createElement('input');
         accept.setAttribute("type", "button");
         accept.setAttribute("value", "Accept");
-        accept.setAttribute("id", "driverAddBtn");
+        accept.setAttribute("id", "acceptBtn");
         accept.setAttribute("class", "decisions-2");
-        accept.setAttribute("onclick", "addPassenger(this)");
+        accept.setAttribute("onclick", "addPassenger(this); sendAcceptanceEmail(this)");
 
         let decline=document.createElement('input');
         decline.setAttribute("type", "button");
         decline.setAttribute("value", "Decline");
         decline.setAttribute("class", "decisions-2");
-        decline.setAttribute("onclick", "declinePassenger(this)");
+        decline.setAttribute("onclick", "sendDeclineEmail(this); declinePassenger(this)");
         
 // ==========================================================//
         row.setAttribute("data-id", doc.id);
@@ -223,19 +271,20 @@ const db= firebase.firestore();
         username.innerHTML = doc.data().Username;
         startloc.innerHTML = doc.data().StartLocation;
         stoploc.innerHTML = doc.data().StopLocation;
-        accept.innerHTML = accept;
-        decline.innerHTML = decline;
 // ==========================================================//
+       
+        // formtd.appendChild(form);
+        row.appendChild(accept);
         row.appendChild(tripid);        
         row.appendChild(fname);
         row.appendChild(lname);
         row.appendChild(username);
         row.appendChild(startloc);
         row.appendChild(stoploc);
-
         row.appendChild(accept);
         row.appendChild(decline);
         tbody.appendChild(row);
+        
 // ==========================================================//        
     }
 
@@ -277,8 +326,10 @@ const db= firebase.firestore();
         });
     }
 
+
     function addPassenger(row){
-        var i = row.parentNode.parentNode.rowIndex;
+        var i = row.parentNode.rowIndex;
+        alert(i);
         var tripID = document.getElementById("passengertripid").innerText;
         var username = document.getElementById("passengerusername").innerText;
         var bookingID = tripID + username;
