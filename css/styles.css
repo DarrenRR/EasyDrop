@@ -232,7 +232,7 @@ body {
     color: #000000;
   }
 
-  #verification{
+  .verification{
     color: #ddd;
     font-weight: bolder;
   }

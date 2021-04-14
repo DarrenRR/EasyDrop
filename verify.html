@@ -44,31 +44,39 @@
 <div class="container-fluid bg-1 text-center">
     <h1 id = "statement" class="margin">Verify your account</h1>
     <div class="container py-5">
+      <div class="row py-4">
 
+      <input type="checkbox" id="driverCheckbox" name="driver" value="Driver">
+      <label for="driverCheckbox" class="verification"> Apply for Driver verification</label><br>
+
+    </div>
+    <br>
     
         <div class="row py-4">
             <div class="col-lg-6 mx-auto">
-                <p id="verification">Step 1: Upload a clear picture of yourself from your shoulder upward.</p>
-                <p id="verification">This picture will be used as your profile picture.</p>
+                <p class = "verification" id="verification1">Step 1: Upload a clear picture of yourself from your shoulder upward.</p>
+                <p class = "verification" id="verification2">This picture will be used as your profile picture.</p>
                 <img src="images/profile.png" id="profilePic" class="img-responsive margin" style="display:inline;" alt="Image">
                 <input type="file"  id = "select_image" style="display:inline;" onchange="chooseFile(event)" />
             </div>
+            
 
             <div class="col-lg-6 mx-auto">
-                <p id="verification">Step 2: Upload a clear picture of a form of identification.</p>
-                <p id="verification">Your form of identification should not be expired.</p>
+                <p class = "verification" id="verification3">Step 2: Upload a clear picture of a form of identification.</p>
+                <p class = "verification" id="verification4">Your form of identification should not be expired.</p>
                 <img src="images/identification.png" id="idPic" class="img-responsive margin" style="display:inline;" alt="Image">
                 <input type="file" id = "select_image2" style="display:inline;" onchange="chooseFile2(event)" />
             </div>
 
         
-            
-            
-    
-         <button onclick="uploadDocuments()">Upload</button>
-                
+
+           
     
          </div>
+         <br>
+         <div class="row py-4">
+         <button onclick="uploadDocuments()">Upload</button>
+        </div>
 
     </div>
     

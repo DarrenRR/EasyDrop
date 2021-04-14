@@ -16,7 +16,7 @@ firebase.auth().onAuthStateChanged((user) => {
                 snapshot.docs.forEach(result => {
                 
                         
-                        
+                        username = result.data().username;
                         var storageRef = firebase.storage().ref();
                         var profilePath = username + "/profile.jpg";
                         var idPath = username + "/id.jpg";
@@ -25,8 +25,15 @@ firebase.auth().onAuthStateChanged((user) => {
                         
                         var address = document.createElement('p'); 
                         var fName = document.createElement('p'); 
+                        var accountType = document.createElement('p');
                         address.innerHTML = "" + result.data().address + ", " + result.data().town;
                         fName.innerHTML = "" + result.data().firstName + " " + result.data().lastName;
+                        if(result.data().isDriver === true){
+                          accountType.innerHTML = "Driver";
+                        }
+                        else{
+                          accountType.innerHTML = "Passenger";
+                        }
                     
                         //$("#acceptedRequests").empty();
                         
@@ -39,6 +46,7 @@ firebase.auth().onAuthStateChanged((user) => {
                         row.setAttribute("id", username);
                         userInfo.appendChild(fName);
                         userInfo.appendChild(address);
+                        userInfo.appendChild(accountType);
 
                         row.appendChild(userInfo);
 
@@ -105,6 +113,8 @@ async function verify(username){
     console.log(username);
     var user = firebase.firestore().collection('users').doc(username);
     const res = await user.update({submittedDocuments: true, isVerified: true});
+    var row = document.getElementById(username);
+    row.remove();
 }
 
 

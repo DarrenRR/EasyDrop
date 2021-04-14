@@ -1,4 +1,6 @@
 var username;
+var isVerified = false;
+var submittedDocuments = false;
 
 //  Gets the current signed in user
 firebase.auth().onAuthStateChanged((user) => {
@@ -8,7 +10,10 @@ firebase.auth().onAuthStateChanged((user) => {
       var email = user.email;
       //  Gets the user's information from firestore
       const currUser = db.collection("users").where("email", "==", email).get().then((snapshot) => {
-          snapshot.docs.forEach(result => {
+          snapshot.docs.forEach(result => { 
+              isVerified = result.data().isVerified;
+              submittedDocuments = result.data().submittedDocuments;
+              /*
               if(result.data().isVerified === false){
                   info[0].style.display = 'block';
                   if(result.data().submittedDDocuments === false){
@@ -24,6 +29,7 @@ firebase.auth().onAuthStateChanged((user) => {
                   var info = document.getElementsByClassName('bg-1');
                   info[0].style.display = 'block';
               }
+              */
           })
       })
   }
@@ -92,55 +98,61 @@ async function getData(){
 
     date = document.getElementById("date").value;
     time = document.getElementById("timepicker").value;
-    console.log(date);
 }
 
 
 async function getTrips(){
-    getData();
-    var date = document.getElementById("date").value;
-    var mark;
-    console.log(startLocation);
-    var carpools = firebase.firestore().collection("Trips").where("Date", "==", date).where("isFull", "==", false).get();
-    var resolved;
-    carpools.catch(function(error){
-        console.log(error);
-        resolved=false;
-    });
-    carpools=await carpools;
-    if(resolved==false)
-      return null;
-  
-
-    drop = {
-      url: "images/drop.png", // url
-      scaledSize: new google.maps.Size(30, 30), // scaled size
-      origin: new google.maps.Point(0,0), // origin
-      anchor: new google.maps.Point(0, 0) // anchor
-    };
-
-    startIcon = {
-      url: "images/start.jpg", // url
-      scaledSize: new google.maps.Size(30, 30), // scaled size
-      origin: new google.maps.Point(0,0), // origin
-      anchor: new google.maps.Point(0, 0) // anchor
-    };
-
-    stopIcon = {
-      url: "images/stop.png", // url
-      scaledSize: new google.maps.Size(30, 30), // scaled size
-      origin: new google.maps.Point(0,0), // origin
-      anchor: new google.maps.Point(0, 0) // anchor
-    };
-
-    best = {
-      url: "images/best.png", // url
-      scaledSize: new google.maps.Size(30, 30), // scaled size
-      origin: new google.maps.Point(0,0), // origin
-      anchor: new google.maps.Point(0, 0) // anchor
+    if(submittedDocuments === false && isVerified === false){
+        alert("Please verify your account to gain access to this feature.");
     }
+    else if(submittedDocuments === true && isVerified === false ){
+        alert("Your documents are currently being verified. Please await verification before accessing this feature.");
+    }
+    else{
+        getData();
+        var date = document.getElementById("date").value;
+        var mark;
+        var carpools = firebase.firestore().collection("Trips").where("Date", "==", date).where("isFull", "==", false).get();
+        var resolved;
+        carpools.catch(function(error){
+            console.log(error);
+            resolved=false;
+        });
+        carpools=await carpools;
+        if(resolved==false)
+          return null;
+      
 
-    return initMap(carpools, mark, passengerStart);
+        drop = {
+          url: "images/drop.png", // url
+          scaledSize: new google.maps.Size(30, 30), // scaled size
+          origin: new google.maps.Point(0,0), // origin
+          anchor: new google.maps.Point(0, 0) // anchor
+        };
+
+        startIcon = {
+          url: "images/start.jpg", // url
+          scaledSize: new google.maps.Size(30, 30), // scaled size
+          origin: new google.maps.Point(0,0), // origin
+          anchor: new google.maps.Point(0, 0) // anchor
+        };
+
+        stopIcon = {
+          url: "images/stop.png", // url
+          scaledSize: new google.maps.Size(30, 30), // scaled size
+          origin: new google.maps.Point(0,0), // origin
+          anchor: new google.maps.Point(0, 0) // anchor
+        };
+
+        best = {
+          url: "images/best.png", // url
+          scaledSize: new google.maps.Size(30, 30), // scaled size
+          origin: new google.maps.Point(0,0), // origin
+          anchor: new google.maps.Point(0, 0) // anchor
+        }
+
+        return initMap(carpools, mark, passengerStart);
+      }
 }
 
 
@@ -190,14 +202,11 @@ async function getTrips(){
 
 
         carpools.forEach(function(result){ 
-                      var tripStart = Date.parse('20 Aug 2000 '+result.data().Time);
+                      var tripStart = Date.parse('20 Aug 2000 '+result.data().StartTime);
                       var bookingTime = Date.parse('20 Aug 2000 '+time);
+                      
                       var timeDifference = (bookingTime-tripStart)/60000;
-                      console.log(tripStart);
-                      console.log(bookingTime);
-                      console.log(timeDifference);
-                      console.log(result.data().Duration);
-                      if((username == result.data().Username) && (timeDifference <= result.data().Duration) && (timeDifference >= 0)){
+                      if((username != result.data().Username) && (timeDifference <= result.data().Duration) && (timeDifference >= 0)){
                         var tripID = result.id;
                         const contentString = "Trip ID: " + result.id + '<br />' +
                         " Driver's Name: "+ result.data().FirstName  + ' ' + result.data().LastName +  '<br />' +
@@ -213,7 +222,6 @@ async function getTrips(){
         
         
 
-        console.log(markers);
         var length;
         var hasResults = false;
         setTimeout(function(){
@@ -230,8 +238,6 @@ async function getTrips(){
                 }));
                 
                 markers[i].shortest.then(function(result){
-                  console.log(result);
-                  console.log(bestResult);
                   if(result < bestResult){
                     bestResult = result;
                   }
@@ -253,7 +259,6 @@ async function getTrips(){
                         map.panTo(mapMarkers[i].position);
                         infoWindows[i].open(map, mapMarkers[i]);
                         new google.maps.event.trigger( mapMarkers[i], 'click' );
-                        console.log(result);
                       }
                     });
 
@@ -288,8 +293,16 @@ async function getTrips(){
 }
 
 function submitRequest(){
+  if(submittedDocuments === false && isVerified === false){
+    alert("Please verify your account to gain access to this feature.");
+  }
+  else if(submittedDocuments === true && isVerified === false ){
+      alert("Your documents are currently being verified. Please await verification before accessing this feature.");
+  }
+  else{
       getData();
       reserveSeat(null, date, time, startLocation, stopLocation, startLat, startLng, stopLat, stopLng);
+  }
 }
 
 function closeWindows(length, infoWindows){
@@ -307,7 +320,6 @@ async function getPassengerCenter(passengers){
       var bound = new google.maps.LatLngBounds();
       passengers.forEach(function(passenger){
           var passengerPosition = passenger.data().StartPoint;
-          console.log("Passengers: " + passengerPosition.latitude);
           bound.extend(new google.maps.LatLng(passengerPosition.latitude, passengerPosition.longitude));
       });
 
@@ -324,7 +336,6 @@ async function getShortest(tripID, passengerStart){
       
       passengers.forEach(function(passenger){
             var passengerPosition = passenger.data().StartPoint;
-            console.log("Passengers: " + passengerPosition.latitude);
             bound.extend(new google.maps.LatLng(passengerPosition.latitude, passengerPosition.longitude));
       });
   
@@ -335,14 +346,11 @@ async function getShortest(tripID, passengerStart){
       var driverDistance = google.maps.geometry.spherical.computeDistanceBetween (passengerStart, driverPosition);
       var passengerDistance = google.maps.geometry.spherical.computeDistanceBetween (passengerStart, passengersCenter);
 
-      console.log("Driver distance: " + driverDistance);
-      console.log("Passenger distance: " + passengerDistance);
+   
       if(driverDistance < passengerDistance){
-        console.log("Driver");
         return driverDistance;
       }
       else{
-        console.log("Passenger");
         return passengerDistance;
       }
 }
@@ -394,15 +402,10 @@ function calculateAndDisplayRoute(directionsDisplay, result) {
 
 
                   if ((google.maps.geometry.poly.isLocationOnEdge(passengerStart, polyline, 0.02)) && (google.maps.geometry.poly.isLocationOnEdge(passengerStop, polyline, 0.02))){
-                        console.log("On route for " +  start + ", " + stop);
-
                         markers.push({ contentString: contentString, start: start, stop: stop, shortest: getShortest(result.id, passengerStart)});
                         infoWindows.push(new google.maps.InfoWindow({
                           content: contentString,
                         }));
-                  }
-                  else{
-                    console.log("Not on route for " + start + ", " + stop);
                   }
               }
           });
@@ -417,7 +420,6 @@ function calculateAndDisplayRoute(directionsDisplay, result) {
     var tripPassengers;
     db.collection('Bookings').where("TripId" , "==", tripID).where("Accepted", "==", true).get().then(snapshot => {
         currentPassengers = snapshot.size;
-        console.log(currentPassengers);
     })
     const trip = db.collection('Trips').doc(tripID);
     const doc = await trip.get();

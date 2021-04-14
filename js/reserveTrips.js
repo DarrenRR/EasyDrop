@@ -8,7 +8,6 @@ var lastName;
 firebase.auth().onAuthStateChanged((user) => {
     if (user){
         userEmail = user.email;
-        console.log(userEmail);
         const currUser = db.collection("users").where("email", "==", userEmail).get().then((snapshot) => {
             snapshot.docs.forEach(result => {
                 username = result.data().username;
@@ -34,7 +33,7 @@ function getDistance(passengerPoint, driver){
 
 
 async function reserveSeat(tripID, date, time, start, stop, startLat, startLng, stopLat, stopLng){
-    console.log("In Reserve");
+
     
     var StartPoint = new firebase.firestore.GeoPoint(startLat, startLng);
     var StopPoint = new firebase.firestore.GeoPoint(stopLat, stopLng);
@@ -62,7 +61,6 @@ async function reserveSeat(tripID, date, time, start, stop, startLat, startLng, 
     }
     else{
             const trip = db.collection('Trips').doc(tripID);
-            console.log(trip);
             const doc = await trip.get();
             if (!doc.exists) {
                 console.log('No such document!');
@@ -71,7 +69,6 @@ async function reserveSeat(tripID, date, time, start, stop, startLat, startLng, 
             }
             var StartDistance = getDistance(StartPoint, doc.data());
             var StopDistance = getDistance(StopPoint, doc.data());
-            console.log("Start Distance: " + StartDistance);
             var bookingID = tripID + username;
             var booking = db.collection("Bookings").doc(bookingID);
             booking.get().then(function(doc){

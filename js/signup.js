@@ -53,7 +53,10 @@ async function signupUser(username, firstName, lastName, email, password, number
           address : address,
           town : town,
           addressLat : latitude,
-          addressLong : longitude
+          addressLong : longitude,
+          isVerified : false,
+          submittedDocuments : false,
+          isDriver : false,
       });
   }
 

@@ -1,5 +1,7 @@
 let idFile = null;
 let picFile = null;
+let uploaded = false;
+let verifyDriver = false;
 
 
 function showImage(src, target) {
@@ -17,6 +19,7 @@ function chooseFile2(e){
     idFile = e.target.files[0];
     var idPic = document.getElementById("idPic");
     var src = document.getElementById("select_image2");
+    uploaded = true;
     showImage(src, idPic);
 }
 
@@ -76,6 +79,7 @@ async function uploadDocuments(){
         })
         const temp={
             submittedDocuments : true,
+            isDriver : verifyDriver,
         };
         console.log(temp);
         firebase.firestore().collection("users").doc(username).update(temp);
@@ -88,6 +92,24 @@ async function uploadDocuments(){
     
 }
 
+const checkbox = document.getElementById('driverCheckbox')
 
+checkbox.addEventListener('change', (event) => {
+var id = document.getElementById("verification3");
+var idPic = document.getElementById("idPic");
+  if (event.currentTarget.checked) {
+    id.innerHTML = "Step 2: Upload a clear picture of your driver's license.";
+    if(uploaded === false){
+        idPic.src = "images/driver-license.png";
+    }
+    verifyDriver = true;
+  } else {
+    id.innerHTML = "Step 2: Upload a clear picture of a form of identification.";
+    if(uploaded === false){
+        idPic.src = "images/identification.png";
+    }
+    verifyDriver = false;
+  }
+})
 
 

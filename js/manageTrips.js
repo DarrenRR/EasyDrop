@@ -27,6 +27,42 @@ async function getPassengerList(thisID){
     return driver;
   }
 
+  async function getDriverData(username){
+    const driverRef = db.collection('users').doc(username);
+    const doc2 = await driverRef.get();
+    return doc2.data();
+      /*
+    var driver = db.collection('users').doc(username).get();
+    var resolved;
+    driver.catch(function(error){
+        console.log(error);
+        resolved = false;
+    });
+    driver = await driver;
+    if(resolved == false)
+        return null;
+    return driver;
+    */
+  }
+
+  async function getTrip(tripID){
+    const tripRef = db.collection('Trips').doc(tripID);
+    const doc2 = await tripRef.get();
+    return doc2.data();
+      /*
+    var driver = db.collection('users').doc(username).get();
+    var resolved;
+    driver.catch(function(error){
+        console.log(error);
+        resolved = false;
+    });
+    driver = await driver;
+    if(resolved == false)
+        return null;
+    return driver;
+    */
+  }
+
 async function getURL(driver, waypoints){
     var src = "&origin=" + driver.data().StartLat + "," + driver.data().StartLng;
     var dest = "&destination=" + driver.data().StopLat + "," + driver.data().StopLng;
@@ -859,9 +895,74 @@ async function allocatePassengers(tripID){
                     rendermyTrips(doc4);// shows logged in user trips 
                 })
             })
+
+            db.collection("Bookings").where("Email", "==", email).where("Accepted", "==", true).get().then((snapshot5) => { //
+                snapshot5.docs.forEach(doc5 => {
+                    console.log(doc5.data().TripId);
+                    rendermyDrops(doc5);// shows logged in user trips 
+                })
+            })
+
+            //Add drops Im in
             
         }
     });
+
+    async function rendermyDrops(doc){
+        let tripID = doc.data().TripId;
+        let driverUsername = doc.data().Username;
+        var passengers = await getPassengerList(tripID);
+        var driver = await getDriverData(driverUsername);
+        var trip = await getTrip(tripID);
+        var driverInfo = "Driver: \n";
+        driverInfo += driver.firstName + " " + driver.lastName + "\n";
+        var passengersInfo = "Passengers: \n";
+        passengers.forEach(function(passenger){
+            passengersInfo += passenger.data().FirstName + " " + passenger.data().LastName + "\n";
+        })
+        var tripInfo = "Trip Start: " + trip.StartAddress + "\n";
+        tripInfo += "Trip Destination: " + trip.StopAddress + "\n";
+        tripInfo += driverInfo + passengersInfo;
+        console.log(tripInfo);
+        let tbody=document.getElementById('myTrips');
+        let row=document.createElement('tr');
+        let tripid=document.createElement('td');
+        //let lname=document.createElement('td');
+        //let fname=document.createElement('td');
+        //let date=document.createElement('td');
+        let startloc=document.createElement('td');
+        let stoploc=document.createElement('td');
+        let status=document.createElement('td');
+// ==========================================================//
+        row.setAttribute("data-id", doc.id);
+        tripid.innerHTML = doc.data().TripId;
+        //fname.innerHTML = doc.data().FirstName;
+        //lname.innerHTML = doc.data().LastName;
+        //date.innerHTML = doc.data().Date;
+        startloc.innerHTML = doc.data().StartLocation;
+        stoploc.innerHTML = doc.data().StopLocation;
+        var bookingStatus;
+        if(doc.data().Accepted == false){
+            bookingStatus = "Pending";
+        }
+        else{
+            bookingStatus = "Accepted";
+        }
+        status.innerHTML = bookingStatus;
+       
+// ==========================================================//
+        row.appendChild(tripid);        
+        //row.appendChild(fname);
+        //row.appendChild(lname);
+        //row.appendChild(date);
+        row.appendChild(startloc);
+        row.appendChild(stoploc);
+        row.appendChild(status);
+        tbody.appendChild(row);
+// ==========================================================//        
+    }
+
+
 
 
     
