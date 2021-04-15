@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css"/>
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Google Maps API-->
   <script defer src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places,geometry&key=AIzaSyAm5YUmQecbnAsYWwKqox8uVucKumvRbxs"></script>
@@ -38,7 +39,7 @@
         </div>
         </div>
     </nav>
-    <div class="container-fluid bg-1 text-left">
+    <div class="container-fluid bg-1 text-left" style="height: 100%;">
         <main class="container"> 
         <div class="panel-group" id="accordian">
             <div class="panel panel-default">
@@ -52,11 +53,9 @@
                 <div class="panel-body">
                     <table class="table table-hover" id="myTable"> <!--table-hover-->
                         <thead class="thead-dark">
-                        <tr style="background-color:grey">
+                        <tr style="background-color:rgb(255, 255, 255)">
                             <th scope="col">Trip ID</th>
-                            <th scope="col">Seats</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Date</th>
+                            <th scope="col">Details</th>
                             <th scope="col">Start</th>
                             <th scope="col">Destination</th>
                             <th scope="row">Decision</th>
@@ -70,114 +69,26 @@
               </div>
             </div>
 
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
-                    Bookings</a>
-                  </h4>
-                </div>
-                <div id="collapse2" class="panel-collapse collapse">
-                  <div class="panel-body">
-                    <table class="table table-hover" id="mypassengerTable"> <!--table-hover-->
-                        <thead class="thead-dark">
-                        <tr style="background-color:grey">
-                            <th scope="col">Trip ID</th>
-                            <th scope="col">First Name</th>
-                            <th scope="col">Last Name</th>
-                            <th scope="col">Username</th>
-                            <th scope="row">Start Location</th>
-                            <th scope="row">Stop Location</th>
-                            <th scope="row">Decision</th>
-                        </tr>
-                        </thead>
-                        <tbody id="passengerRequests">
-                            
-                        </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
-                    My Passengers</a>
-                  </h4>
-                </div>
-                <div id="collapse3" class="panel-collapse collapse">
-                  <div class="panel-body">
-                    <table class="table table-hover" id="reservedseats"> <!--table-hover-->
-                        <thead class="thead-dark">
-                        <tr style="background-color:grey">
-                            <th scope="col">Trip ID</th>
-                            <th scope="col">First Name</th>
-                            <th scope="col">Last Name</th>
-                            <th scope="col">Username</th>
-                            <th scope="row">Start Location</th>
-                            <th scope="row">Stop Location</th>
-                        </tr>
-                        </thead>
-                        <tbody id="acceptedRequests">
-                            
-                        </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">
-                    Drops I've Reserved</a>
+                    Drops I'm In</a>
                   </h4>
                 </div>
                 <div id="collapse4" class="panel-collapse collapse">
                   <div class="panel-body">
-                    <table class="table table-hover" id="myTrips"> <!--table-hover-->
+                    <table class="table table-hover" id="myCurrentBookings"> 
                         <thead class="thead-dark">
-                        <tr style="background-color:grey">
+                        <tr style="background-color:rgb(252, 252, 252)">
                             <th scope="col">Trip ID</th>
-                            <!--<th scope="col">First Name</th>-->
-                            <!--<th scope="col">Last Name</th>-->
-                            <!--<th scope="row">Date</th>-->
                             <th scope="row">Start Location</th>
                             <th scope="row">Stop Location</th>
                             <th scope="row">Status</th>
-                        </tr>
-                        </thead>
-                        <tbody id="acceptedRequests">
-                            
-                        </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">
-                    Drops I'm In</a>
-                  </h4>
-                </div>
-                <div id="collapse5" class="panel-collapse collapse">
-                  <div class="panel-body">
-                    <table class="table table-hover" id="myDrops"> <!--table-hover-->
-                        <thead class="thead-dark">
-                        <tr style="background-color:grey">
-                            <th scope="col">Trip ID</th>
-                            <!--<th scope="col">First Name</th>-->
-                            <!--<th scope="col">Last Name</th>-->
-                            <!--<th scope="row">Date</th>-->
-                            <th scope="row">Start Location</th>
-                            <th scope="row">Stop Location</th>
                             <th scope="row">Decision</th>
                         </tr>
                         </thead>
-                        <tbody id="acceptedRequests">
+                        <tbody id="myBookings">
                             
                         </tbody>
                     </table>
@@ -187,7 +98,116 @@
 
         </div>
             <!--<p>My Drops</p>-->
+            <div class="modal" id="myModal">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">Describe your Experience...</h4>
+                  </div>
+                  
+                  <!-- Modal body -->
+                  <div class="container">
+                  <div class="modal-body">
+                    <div id="starRender" class="col-md-8"> 
+                                  
+                    </div>
+                  </div>
+                  </div>
+                  
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="modal" id="bookingsModal">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">Manage Trip</h4>
+                  </div>
+                  
+                  <!-- Modal body -->
+                  <div class="container">
+                  <div class="modal-body">
+                    <div id="bookingsRender" class="col-md-8">
         
+                    </div>
+                  </div>
+                  </div>
+                  
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+
+            <div class="modal" id="passengersModal">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">Manage Trip</h4>
+                  </div>
+                  
+                  <!-- Modal body -->
+                  <div class="container">
+                  <div class="modal-body">
+                    <div id="passengersRender" class="col-md-8">
+        
+                    </div>
+                  </div>
+                  </div>
+                  
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+
+            <div class="modal" id="tripInfoModal">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">Trip Information</h4>
+                  </div>
+                  
+                  <!-- Modal body -->
+                  <div class="container">
+                  <div class="modal-body">
+                    <div id="infoRender" class="col-md-8">
+                        <p id="tripInfo"></p>
+                    </div>
+                  </div>
+                  </div>
+                  
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            
             
 
         </main>
@@ -195,7 +215,7 @@
     
     <!-- </div> -->
     <!-- Footer -->
-    <footer class="container-fluid bg-4 text-center">
+    <footer style ="height:auto;"class="container-fluid bg-4 text-center">
         <p>EasyDrop by RMD Technologies</p> 
     </footer>
     <!--------------------HAVE TO CHANGE TO SUIT DARREN'S PROJECT---------fIREBASE SDK---------------------->
@@ -216,6 +236,9 @@
 <script src="js/search.js"></script>
 <script src="js/authentication.js"></script>
 <script src="js/navbar.js"></script>
+<script src="https://kit.fontawesome.com/e4a96294f5.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" ></script>
     
 </body>
 </html>

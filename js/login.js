@@ -7,7 +7,6 @@ async function signInUser(email, password){
     await result;
     var signed=await firebase.auth().currentUser;
     if(signed){     //check to see if the user has properly signed in
-      alert("Signed in");
       return true;
     }
     alert("Could not sign in");

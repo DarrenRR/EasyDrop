@@ -13,7 +13,7 @@ firebase.auth().onAuthStateChanged((user) => {
           snapshot.docs.forEach(result => { 
               isVerified = result.data().isVerified;
               submittedDocuments = result.data().submittedDocuments;
-              /*
+            /*
               if(result.data().isVerified === false){
                   info[0].style.display = 'block';
                   if(result.data().submittedDDocuments === false){
@@ -30,6 +30,7 @@ firebase.auth().onAuthStateChanged((user) => {
                   info[0].style.display = 'block';
               }
               */
+        
           })
       })
   }
@@ -255,7 +256,7 @@ async function getTrips(){
 
                     markers[i].shortest.then(function(result){
                       if(result=== bestResult){
-                        mapMarkers[i].setIcon(best);
+                        //mapMarkers[i].setIcon(best);
                         map.panTo(mapMarkers[i].position);
                         infoWindows[i].open(map, mapMarkers[i]);
                         new google.maps.event.trigger( mapMarkers[i], 'click' );

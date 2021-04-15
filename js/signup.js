@@ -19,7 +19,6 @@ async function signupUser(username, firstName, lastName, email, password, number
   
   //Registers a user using the values from the input boxes then redirects to homepage
   async function runSignupUser(){
-    alert("runSignup");
     var username = document.getElementById("username").value;
     var firstName = document.getElementById("fName").value;
     var lastName = document.getElementById("lName").value;

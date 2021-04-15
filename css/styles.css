@@ -17,7 +17,7 @@ body {
   .bg-2 { 
     background-color: #474e5d; /* Dark Blue */
     color: #000000;
-    height: 100%;
+    height: 70%;
   }
   .bg-3 { 
     background-color: #ffffff; /* White */
@@ -188,6 +188,22 @@ body {
 
   .decisions{
     font-size: 10px;
+    background-color: #bfc0c0;
+    color: #000000;
+    border-color: rgb(199, 199, 199);
+    box-shadow: none;
+  }
+
+
+  .editClass{
+    font-size: 10px;
+  }
+
+  .saveClass{
+    font-size: 10px;
+  }
+  .tripidD{
+    font-size: 10px;
   }
 
   .decisions-2{
@@ -196,6 +212,7 @@ body {
 
   #description{
     margin-bottom: 2em ;
+    color: white;
   }
 
   #statement{
@@ -232,7 +249,7 @@ body {
     color: #000000;
   }
 
-  .verification{
+  #verification{
     color: #ddd;
     font-weight: bolder;
   }
@@ -267,3 +284,24 @@ body {
     padding: 5px;
   }
 
+  .modal-content{
+    width: 850px;
+    text-align: center;
+  }
+
+  #bookingsRender{
+    width: min-content;
+  }
+
+  #decisionsCol{
+    width: fit-content;
+  }
+
+  .modal {
+    text-align: center;
+    padding: 0!important;
+  }
+    
+  #mapview{
+    height: 100%;
+  }

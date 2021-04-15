@@ -33,8 +33,7 @@ function getDistance(passengerPoint, driver){
 
 
 async function reserveSeat(tripID, date, time, start, stop, startLat, startLng, stopLat, stopLng){
-
-    
+    console.log("In Reserve");
     var StartPoint = new firebase.firestore.GeoPoint(startLat, startLng);
     var StopPoint = new firebase.firestore.GeoPoint(stopLat, stopLng);
     
