@@ -7,7 +7,6 @@ async function signInUser(email, password){
     await result;
     var signed=await firebase.auth().currentUser;
     if(signed){     //check to see if the user has properly signed in
-      alert("Signed in");
       return true;
     }
     alert("Could not sign in");
@@ -20,6 +19,11 @@ async function signInUser(email, password){
     var password=document.getElementById("password").value;
     var success=await signInUser(email, password);
     if(success){
-      alert("Login successful");
+      if(email === "admin@easydrop.com"){
+        window.location.href="adminpanel.html";
+      }
+      else{
+        window.location.href="index.html";
+      }
     }
   }

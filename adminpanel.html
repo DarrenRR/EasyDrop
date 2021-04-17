@@ -10,6 +10,13 @@
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    .bg-1 { 
+    background-color: #39b485; /* Green */
+    color: #000000;
+    height: 100%;
+  }
+  </style>
 </head>
 <body>
 
@@ -22,67 +29,54 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="index.html">EasyDrop</a>
+      <a class="navbar-brand">EasyDrop</a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
-        <li class = "regular-options" style="display: none;"><a href="Search.html">Find a Drop</a></li>
-        <li class = "regular-options" style="display: none;"><a href="ShareRide.html">Offer a Drop </a></li>
         <li class = "logged-out"  style="display: none;"><a href="login.html">Log In</a></li>
         <li class = "logged-out"  style="display: none;"><a href="signup.html">Sign Up</a></li>
-        <li class = "logged-in"  style="display: none;"><a href="ManageTripsandPassengers.html">Dashboard</a></li>
         <li class = "logged-in"  style="display: none;"><a href="login.html" onclick="signOut()">Log Out</a></li>
       </ul>
     </div>
   </div>
 </nav>
 
-<div class="verify" style="display: none;">
-  <p>Your account isn't verified. Please<a id="verifytext" href="verify.html">verify</a>your account in order to gain full access of EasyDrop.</p>
-</div>
-
 <!-- First Container -->
-<div class="container-fluid bg-1 text-center">
-  <h1 id = "statement" class="margin">Reach your destination with some company.</h1>
-  <img src="images/homepage.png"   style="display:inline" alt="Carpool" >
-  <div class="buttons"></div>
-  <br>
-    <a href="Search.html" class="button1">Find a Drop</a>
-    <a href="ShareRide.html" class="button1">Offer a Drop</a>
-  </div>
-</div>
-
-<!-- Second Container 
-<div class="container-fluid bg-2 text-center">
-  <h3 class="margin">What Am I?</h3>
-  <a href="#" class="btn btn-default btn-lg">
-    <span class="glyphicon glyphicon-search"></span> Search
-  </a>
-  
-</div>
--->
-
-
- <!-- Third Container (Grid) -->
-<div class="container-fluid bg-3 text-center">    
-  <div class="row">
-    <div class="col-sm-4">
-      <h1 id="features">Quick and Easy</h1>
-      <p>Find carpools suited to your locations.</p>
-      <img src="images/find.png" class="img-responsive margin" style="display:inline;"width:350px;height:300px alt="Image">
+<div class="container-fluid bg-1 text-center" style="height: 150%;">
+  <h1 id = "statement" class="margin">Administrator Panel</h1>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+        User Submissions</a>
+      </h4>
     </div>
-    <div class="col-sm-4"> 
-      <h1 id="features" >Safe</h1>
-      <p>All users are verified.</p>
-      <img src="images/verified.png" class="img-responsive margin" style="display:inline;" alt="Image"/>
-    </div>
-    <div class="col-sm-4"> 
-      <h1 id="features">Multiple Stops</h1>
-      <p>We'll provide the quickest route to save time.</p>
-      <img src="images/routes.png" class="img-responsive margin" style="display:inline;"width:400px;height:280px alt="Image">
+    <div id="collapse2" class="panel-collapse collapse" style="height: 100%;">
+      <div class="panel-body">
+        <table class="table table-hover" id="mypassengerTable"> <!--table-hover-->
+            <thead class="thead-dark">
+            <tr style="background-color:grey">
+                <th scope="col">User Information</th>
+                <th scope="col">User Photo</th>
+                <th scope="col">User Identification</th>
+                <th scope="col">Decision</th>
+            </tr>
+            </thead>
+            <tbody id="userSubmissions" style="height: fit-content;">
+                
+            </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
+
+
+
+
+
+
+
 
 
 <!-- Footer -->
@@ -105,6 +99,7 @@
  
  <!--JS scripts-->
  <script src="js/authentication.js"></script>
+ <script src="js/admin.js"></script>
  <script src="js/user.js"></script>
  <script src="js/login.js"></script>
  <script src="js/navbar.js"></script>

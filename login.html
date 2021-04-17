@@ -7,71 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
   <style>
-  body {
-    font: 20px Montserrat, sans-serif;
-    line-height: 1.8;
-    color: #f5f6f7;
-  }
-  p {font-size: 16px;}
-  .margin {margin-bottom: 45px;}
-  .bg-1 { 
-    background-color: #1abc9c; /* Green */
-    color: #070407;
-  }
-  .bg-2 { 
-    background-color: #474e5d; /* Dark Blue */
-    color: #ffffff;
-  }
-  .bg-3 { 
-    background-color: #ffffff; /* White */
-    color: #555555;
-  }
-  .bg-4 { 
-    background-color: #2f2f2f; /* Black Gray */
-    color: #fff;
-  }
-  .container-fluid {
-    padding-top: 70px;
-    padding-bottom: 70px;
-  }
-  .navbar {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    border: 0;
-    border-radius: 0;
-    margin-bottom: 0;
-    font-size: 12px;
-    letter-spacing: 5px;
-  }
-  .navbar-nav  li a:hover {
-    color: #1abc9c !important;
-  }
-
-  a{
-    display:inline;
-    width: 100%;
-    padding-top: 30px;
-    padding:0.35em 1.2em;
-    border:0.1em solid #FFFFFF;
-    margin:0 0.3em 0.3em 0;
-    border-radius:0.12em;
-    box-sizing: border-box;
-    text-decoration: none;
-    font-family:'Roboto',sans-serif;
-    font-weight:300;
-    color:#FFFFFF;
-    text-align:center;
-    transition: all 0.2s;
-  }
-
-  #buttons{
     
-    display: inline;
-  }
-
   </style>
   </head>
   <body>
@@ -89,21 +30,25 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Find a Drop</a></li>
-            <li><a href="#">Offer a Drop </a></li>
-            <li><a href="login.html">Log In</a></li>
-            <li><a href="signup.html">Sign Up</a></li>
+            <li class = "regular-options" style="display: none;"><a href="Search.html">Find a Drop</a></li>
+            <li class = "regular-options" style="display: none;"><a href="ShareRide.html">Offer a Drop </a></li>
+            <li class = "logged-out"  style="display: none;"><a href="login.html">Log In</a></li>
+            <li class = "logged-out"  style="display: none;"><a href="signup.html">Sign Up</a></li>
+            <li class = "logged-in"  style="display: none;"><a href="ManageTripsandPassengers.html">Dashboard</a></li>
+            <li class = "logged-in"  style="display: none;"><a href="login.html" onclick="signOut()">Log Out</a></li>
           </ul>
         </div>
       </div>
     </nav>
       <!-- First Container -->
-    <div class="container-fluid bg-1 text-center">
+    <div class="container-fluid bg-1 text-center" style="height: 80%;">
+      <h1 id = "statement" class="margin">Sign in to your account</h1>
       <div id="signin">
         <div>
           <input id="email" type="text" placeholder="email"><br/><br/>
           <input id="password" type="password" placeholder="password"><br/><br/>
-          <button onclick="runSignIn();">Log in</button><br/>
+          <button onclick="runSignIn();">Log in</button><br/><br>
+          <a href="signup.html" class = "button1">Don't have an account? Sign Up</a>
         </div>
       </div>
     </div>
@@ -130,5 +75,6 @@
  <script src="js/authentication.js"></script>
  <script src="js/user.js"></script>
  <script src="js/login.js"></script>
+ <script src="js/navbar.js"></script>
   </body>
 </html>
